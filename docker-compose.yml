@@ -1,10 +1,10 @@
 version: '3.7'
 services:
 
-  postgresql:
+  postgres:
     image: postgres:12.3
-    container_name: postgresql
-    hostname: postgresql
+    container_name: postgres
+    hostname: postgres
     restart: on-failure
     ports:
       - 5432:5432
@@ -15,7 +15,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:5.0.4
     hostname: zookeeper
-    container_name: zookeeper
+    container_name: cp-zookeeper
     ports:
       - 2181:2181
     environment:
@@ -25,7 +25,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:5.0.4
     hostname: kafka
-    container_name: kafka
+    container_name: cp-kafka
     depends_on:
       - zookeeper
     ports:
@@ -36,10 +36,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
-  schemaregistry:
+  schema-registry:
     image: confluentinc/cp-schema-registry:5.0.4
-    hostname: schemaregistry
-    container_name: schemaregistry
+    hostname: schema-registry
+    container_name: schema-registry
     restart: always
     depends_on:
       - zookeeper
@@ -48,8 +48,8 @@ services:
       - 8081:8081
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
-      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
-      SCHEMA_REGISTRY_LISTENERS: http://schemaregistry:8081
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
 
   gateway:
     image: fragaly/gateway
@@ -65,7 +65,7 @@ services:
     container_name: producer
     restart: on-failure
     depends_on:
-      - schemaregistry
+      - schema-registry
       - gateway
     ports:
       - 8080:8080
