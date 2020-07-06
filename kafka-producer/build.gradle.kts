@@ -62,8 +62,8 @@ kotlin {
 
 object DockerProps {
     const val BASE_IMAGE = "gcr.io/distroless/java:11"
-    const val APP_PORT = "8082"
-    const val JMX_PORT = "38082"
+    const val APP_PORT = "8083"
+    const val JMX_PORT = "38083"
 }
 
 jib {
@@ -71,8 +71,7 @@ jib {
         image = DockerProps.BASE_IMAGE
     }
     container {
-        jvmFlags =
-            parseSpaceSeparatedArgs("-noverify -Dspring.profiles.active=dev -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
+        jvmFlags = parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
         ports = listOf(DockerProps.APP_PORT, DockerProps.JMX_PORT)
         labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
     }

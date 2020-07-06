@@ -31,7 +31,7 @@ spring:
 
 # server specific properties
 server:
-  port: 8080
+  port: 8083
   shutdown: graceful
   servlet:
     session:

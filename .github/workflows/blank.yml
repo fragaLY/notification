@@ -94,5 +94,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          repository: integr8ed/inad-client
-          tags: 1.0.0, latest
+          repository: fragaly/notification-app
+          tags: latest

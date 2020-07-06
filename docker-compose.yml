@@ -45,8 +45,49 @@ services:
       - zookeeper
       - kafka
     ports:
-      - 8079:8081
+      - 8081:8081
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
       SCHEMA_REGISTRY_HOST_NAME: schemaregistry
       SCHEMA_REGISTRY_LISTENERS: http://schemaregistry:8081
+
+  gateway:
+    image: fragaly/gateway
+    hostname: gateway
+    container_name: gateway
+    restart: on-failure
+    ports:
+      - 8082:8082
+
+  producer:
+    image: fragaly/producer
+    hostname: producer
+    container_name: producer
+    restart: on-failure
+    depends_on:
+      - schemaregistry
+      - gateway
+    ports:
+      - 8080:8080
+
+#  consumer:
+#    image: fragaly/consumer
+#    hostname: consumer
+#    container_name: consumer
+#    restart: on-failure
+#    depends_on:
+#      - schemaregistry
+#      - gateway
+#    ports:
+#      - 8083:8083
+
+#  frontend:
+#    image: fragaly/web
+#    hostname: web
+#    container_name: web
+#    restart: on-failure
+#    depends_on:
+#      - consumer
+#      - producer
+#    ports:
+#      - 80:80
