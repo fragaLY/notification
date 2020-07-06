@@ -74,14 +74,6 @@ jib {
     from {
         image = DockerProps.BASE_IMAGE
     }
-    to {
-        image = "registry.hub.docker.com/${System.getenv("DOCKER_HUB_USER")}/${application.applicationName}:${version}"
-        auth {
-            username = System.getenv("DOCKER_HUB_USER")
-            password = System.getenv("DOCKER_HUB_PASSWORD")
-        }
-        tags = setOf("$version", "latest")
-    }
     container {
         jvmFlags =
             org.jetbrains.kotlin.util.parseSpaceSeparatedArgs("-noverify -Dspring.profiles.active=dev -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")

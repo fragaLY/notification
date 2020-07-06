@@ -28,7 +28,7 @@ jobs:
         run: ./gradlew build -x test -x compileJava --parallel
       - name: PRODUCER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
-        run: ./gradlew jib
+        run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/producer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
   consumer:
     runs-on: ubuntu-latest
     defaults:
@@ -51,7 +51,7 @@ jobs:
         run: ./gradlew build -x test -x compileJava --parallel
       - name: CONSUMER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
-        run: ./gradlew jib
+        run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/consumer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
   gateway:
     runs-on: ubuntu-latest
     defaults:
