@@ -5,7 +5,7 @@
 > ![.github/workflows/blank.yml](https://github.com/fragaLY/notification/workflows/.github/workflows/blank.yml/badge.svg)
 >
 
-###TECH STACK:
+### TECH STACK:
 * Kotlin, VueJS;
 * Spring Boot, Spring Gateway, Kafka;
 * Postgres;
@@ -13,7 +13,7 @@
 * Jetty, Netty, Nginx; 
 * Github CI;
 
-#### IN PROGRESS:
+##### IN PROGRESS:
 * Flyway;
 * OPENAPI 3;
 * Config Server;
