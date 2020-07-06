@@ -75,22 +75,7 @@ jobs:
       - name: GATEWAY DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/gateway:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
-  frontend-build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: notification-app
-    steps:
-      - uses: actions/checkout@v2
-      - name: FRONTEND BUILD
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ secrets.NODE_VERSION }}
-        - name: NPM INSTALLATION
-          run: npm install --only=prod --silent
-        - name: NPM BUILD
-          run: npm run build
-  frontend-delivery:
+  frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
