@@ -85,10 +85,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ secrets.NODE_VERSION }}
-      - name: NPM INSTALLATION
-        run: npm install --only=prod --silent
-      - name: NPM BUILDING
-        run: npm run build
       - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
