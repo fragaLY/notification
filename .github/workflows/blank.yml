@@ -90,8 +90,7 @@ jobs:
       - name: NPM BUILD
         run: npm run build
       - name: FRONTEND DOCKER IMAGE DELIVERY
-      - uses: actions/checkout@v2
-      - uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v1
         with:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
