@@ -15,10 +15,10 @@ jobs:
         with:
           java-version: '11.0.6'
           architecture: x64
-      - name: GRADLE PREPARATION
-        run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO PRODUCER
         run: cd kafka-producer
+      - name: GRADLE PREPARATION
+        run: chmod +x gradlew
       - name: PRODUCER COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: PRODUCER TESTS
@@ -36,10 +36,10 @@ jobs:
         with:
           java-version: '11.0.6'
           architecture: x64
-      - name: GRADLE PREPARATION
-        run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO CONSUMER
         run: cd kafka-consumer
+      - name: GRADLE PREPARATION
+        run: chmod +x gradlew
       - name: CONSUMER COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: CONSUMER TESTS
@@ -57,10 +57,10 @@ jobs:
         with:
           java-version: '11.0.6'
           architecture: x64
-      - name: GRADLE PREPARATION
-        run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO GATEWAY
         run: cd gateway
+      - name: GRADLE PREPARATION
+        run: chmod +x gradlew
       - name: GATEWAY COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: GATEWAY TESTS
