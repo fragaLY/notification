@@ -73,8 +73,8 @@ jib {
     to {
         image = "registry.hub.docker.com/${System.getenv("DOCKER_HUB_USER")}/${application.applicationName}:${version}"
         auth {
-            username = System.getenv("DOCKER_HUB_USER")
-            password = System.getenv("DOCKER_HUB_PASSWORD")
+            username = System.getProperty("DOCKER_HUB_USER")
+            password = System.getProperty("DOCKER_HUB_PASSWORD")
         }
         tags = setOf("$version", "latest")
     }
