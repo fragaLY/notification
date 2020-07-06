@@ -1,2 +1,2 @@
 rootProject.name = "notification"
-include ("kafka-consumer", "kafka-producer")
+include ("kafka-consumer", "kafka-producer", "gateway")

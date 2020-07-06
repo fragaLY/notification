@@ -7,22 +7,25 @@
 
 ###TECH STACK:
 * Kotlin, VueJS;
-* Spring Boot, Kafka;
+* Spring Boot, Spring Gateway, Kafka;
 * Postgres;
 * Gradle Kts, Jib, Docker compose;
-* Jetty, Nginx; 
+* Jetty, Netty, Nginx; 
 * Github CI;
 
 #### IN PROGRESS:
+* Flyway;
+* OPENAPI 3;
 * Config Server;
-* Spring Gateway;
 * Resilience4j;
 * TestContainers;
 * Avro;
 * SchemaRegistry;
-* Debezium;
+* Orika;
+* Debezium for Outbox + Delay Queue;
 * Spring Cache + Ehcache;
 * Minicube migration;
 * Prometheus;
 * Grafana;
-* Kibana.
+* Kibana;
+* Security.

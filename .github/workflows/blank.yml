@@ -58,3 +58,15 @@ jobs:
       - name: CONSUMER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib
+      #GATEWAY
+      script:
+        - cd ~/gateway
+      - name: GATEWAY COMPILATION
+        run: ./gradlew compileKotlin -x compileJava --parallel
+      - name: GATEWAY TESTS
+        run: ./gradlew test -x compileTestJava --parallel
+      - name: GATEWAY BUILD
+        run: ./gradlew build -x test -x compileJava --parallel
+      - name: GATEWAY DOCKER DELIVERY
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jib
