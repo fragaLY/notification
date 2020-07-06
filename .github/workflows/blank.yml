@@ -85,8 +85,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ secrets.NODE_VERSION }}
-      - name: FRONTEND DOCKER IMAGE DELIVERY
+      - name: DIR
         run: echo $PWD
+      - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
