@@ -79,7 +79,6 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash
         working-directory: notification-app
     steps:
       - uses: actions/checkout@v2
