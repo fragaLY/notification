@@ -2,7 +2,7 @@
 > VERSION 
 `0.0.1`
 >
-> ![](https://github.com/fragaly/notification/workflows/ci/badge.svg?branch=master)
+> ![.github/workflows/blank.yml](https://github.com/fragaLY/notification/workflows/.github/workflows/blank.yml/badge.svg)
 >
 
 ###TECH STACK:
