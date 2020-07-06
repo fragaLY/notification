@@ -90,9 +90,10 @@ jobs:
       - name: NPM BUILD
         run: npm run build
       - name: FRONTEND DOCKER IMAGE DELIVERY
-        uses: docker/build-push-action@v1
+      - uses: actions/checkout@v2
+      - uses: docker/build-push-action@v1
         with:
-          dockerfile: ./Dockerfile
+          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: fragaly/notification-app
