@@ -18,7 +18,7 @@ jobs:
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO PRODUCER
-        run: cd ~/kafka-producer
+        run: cd /kafka-producer
       - name: PRODUCER COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: PRODUCER TESTS
@@ -39,7 +39,7 @@ jobs:
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO CONSUMER
-        run: cd ~/kafka-consumer
+        run: cd /kafka-consumer
       - name: CONSUMER COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: CONSUMER TESTS
@@ -60,7 +60,7 @@ jobs:
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: CHANGE DIRECTORY TO GATEWAY
-        run: cd ~/gateway
+        run: cd /gateway
       - name: GATEWAY COMPILATION
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: GATEWAY TESTS
@@ -78,7 +78,7 @@ jobs:
         with:
           node-version: '12.x'
       - name: CHANGE DIRECTORY TO FRONTEND
-        run: cd ~/notification-app
+        run: cd /notification-app
       - name: NPM INSTALLATION
         run: npm install --only=prod --silent
       - name: NPM BUILDING
