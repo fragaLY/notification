@@ -85,10 +85,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ secrets.NODE_VERSION }}
+      - name: NPM INSTALLATION
+        run: npm install --only=prod --silent
+      - name: NPM BUILD
+        run: npm run build
       - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
-          dockerfile: notitication-app/Dockerfile
+          dockerfile: ./Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: fragaly/notification-app
