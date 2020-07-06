@@ -6,21 +6,69 @@ on:
       - master
 
 jobs:
-  ci:
+  producer:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11.0.6'
+        architecture: x64
+    - name: GRADLE PREPARATION
+      run: chmod +x gradlew
+    - name: CHANGE DIRECTORY TO PRODUCER
+      run: cd ~/kafka-producer
+    - name: PRODUCER COMPILATION
+      run: ./gradlew compileKotlin -x compileJava --parallel
+    - name: PRODUCER TESTS
+      run: ./gradlew test -x compileTestJava --parallel
+    - name: PRODUCER BUILD
+      run: ./gradlew build -x test -x compileJava --parallel
+    - name: PRODUCER DOCKER DELIVERY
+      if: github.ref == 'refs/heads/master'
+      run: ./gradlew jib
+  consumer:
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11.0.6'
+        architecture: x64
+    - name: GRADLE PREPARATION
+      run: chmod +x gradlew
+    - name: CHANGE DIRECTORY TO CONSUMER
+      run: cd ~/kafka-consumer
+    - name: CONSUMER COMPILATION
+      run: ./gradlew compileKotlin -x compileJava --parallel
+    - name: CONSUMER TESTS
+      run: ./gradlew test -x compileTestJava --parallel
+    - name: CONSUMER BUILD
+      run: ./gradlew build -x test -x compileJava --parallel
+    - name: CONSUMER DOCKER DELIVERY
+      if: github.ref == 'refs/heads/master'
+      run: ./gradlew jib
+  gateway:
     runs-on: ubuntu-latest
     steps:
-      #PREPARATION
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
       - uses: actions/setup-java@v1
         with:
           java-version: '11.0.6'
           architecture: x64
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
-      #FRONTEND
+      - name: CHANGE DIRECTORY TO GATEWAY
+        run: cd ~/gateway
+      - name: GATEWAY COMPILATION
+        run: ./gradlew compileKotlin -x compileJava --parallel
+      - name: GATEWAY TESTS
+        run: ./gradlew test -x compileTestJava --parallel
+      - name: GATEWAY BUILD
+        run: ./gradlew build -x test -x compileJava --parallel
+      - name: GATEWAY DOCKER DELIVERY
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jib
+  frontent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: CHANGE DIRECTORY TO FRONTEND
         run: cd ~/notification-app
       - name: NPM INSTALLATION
@@ -34,39 +82,3 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: integr8ed/inad-client
           tags: 1.0.0, latest
-      #PRODUCER
-      - name: CHANGE DIRECTORY TO PRODUCER
-        run: cd ~/kafka-producer
-      - name: PRODUCER COMPILATION
-        run: ./gradlew compileKotlin -x compileJava --parallel
-      - name: PRODUCER TESTS
-        run: ./gradlew test -x compileTestJava --parallel
-      - name: PRODUCER BUILD
-        run: ./gradlew build -x test -x compileJava --parallel
-      - name: PRODUCER DOCKER DELIVERY
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jib
-      #CONSUMER
-      - name: CHANGE DIRECTORY TO CONSUMER
-        run: cd ~/kafka-consumer
-      - name: CONSUMER COMPILATION
-        run: ./gradlew compileKotlin -x compileJava --parallel
-      - name: CONSUMER TESTS
-        run: ./gradlew test -x compileTestJava --parallel
-      - name: CONSUMER BUILD
-        run: ./gradlew build -x test -x compileJava --parallel
-      - name: CONSUMER DOCKER DELIVERY
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jib
-      #GATEWAY
-      - name: CHANGE DIRECTORY TO GATEWAY
-        run: cd ~/gateway
-      - name: GATEWAY COMPILATION
-        run: ./gradlew compileKotlin -x compileJava --parallel
-      - name: GATEWAY TESTS
-        run: ./gradlew test -x compileTestJava --parallel
-      - name: GATEWAY BUILD
-        run: ./gradlew build -x test -x compileJava --parallel
-      - name: GATEWAY DOCKER DELIVERY
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jib
