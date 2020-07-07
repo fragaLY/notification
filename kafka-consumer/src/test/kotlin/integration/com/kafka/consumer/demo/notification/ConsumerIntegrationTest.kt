@@ -9,9 +9,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry
@@ -26,7 +23,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
-class ConsumerIntegrationTest : IntegrationTest() {
+class ConsumerIntegrationTest : KafkaIntegrationTest() {
 
     @field:Autowired
     lateinit var broker: EmbeddedKafkaBroker;
@@ -38,7 +35,7 @@ class ConsumerIntegrationTest : IntegrationTest() {
     lateinit var registry: KafkaListenerEndpointRegistry
 
     @field:Autowired
-    lateinit var repository: NotificationH2Repository
+    lateinit var repository: NotificationRepository
 
     @field:Autowired
     lateinit var mapper: ObjectMapper
@@ -66,38 +63,33 @@ class ConsumerIntegrationTest : IntegrationTest() {
     @Transactional
     fun `test consume create event`() {
         // given
-        val event = NotificationEvent(1, Notification(null, "from", "to"), EventType.CREATE_NOTIFICATION)
+        val event = TestObjects.EVENT
         template.sendDefault(mapper.writeValueAsString(event)).get()
-        val expected = Notification(1, "from", "to")
         val record = ProducerRecord<Long, String>("notification-event", event.key, mapper.writeValueAsString(event))
 
         //when
         producer.send(record)
         producer.flush()
 
-        verify(service, Mockito.times(1)).create(ArgumentMatchers.isA(Notification::class.java))
-
-        // then
+        //then
+        CountDownLatch(1).await(3, TimeUnit.SECONDS)
         val notifications = repository.findAll().toList()
         assertTrue(notifications.size == 1)
-        assertEquals(expected, notifications[0])
+        assertEquals(TestObjects.NOTIFICATION, notifications[0])
     }
 
     @Test
     @Transactional
     fun `test consume update event`() {
         // given
-        val data =
-            """{"key":1,"notification":{"id":1,"sender":"sender","receiver":"receiver"},"type":"UPDATE_NOTIFICATION"}"""
-        template.sendDefault(data).get()
-        val expected = Notification(1, "sender", "receiver")
+        template.sendDefault(mapper.writeValueAsString(TestObjects.EVENT)).get()
 
         // when
-        CountDownLatch(1).await(1, TimeUnit.SECONDS)
+        CountDownLatch(1).await(3, TimeUnit.SECONDS)
 
         // then
         val notifications = repository.findAll().toList()
         assertTrue(notifications.size == 1)
-        assertEquals(expected, notifications[0])
+        assertEquals(TestObjects.NOTIFICATION, notifications[0])
     }
 }

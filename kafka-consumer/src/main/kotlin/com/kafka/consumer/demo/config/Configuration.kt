@@ -28,7 +28,7 @@ class NotificationEventsConsumer {
     ): ConcurrentKafkaListenerContainerFactory<Any, Any> {
         val factory = ConcurrentKafkaListenerContainerFactory<Any, Any>()
         configurer.configure(factory, consumerFactory)
-        factory.setConcurrency(3)
+        factory.setConcurrency(1)
         factory.containerProperties.ackMode = ContainerProperties.AckMode.MANUAL
         factory.setErrorHandler(errorHandler)
         factory.setRetryTemplate(retryTemplate)

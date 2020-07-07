@@ -9,6 +9,7 @@ plugins {
     kotlin("plugin.spring") version "1.3.72"
     kotlin("plugin.jpa") version "1.3.72"
     id("com.google.cloud.tools.jib") version "2.4.0"
+    id("org.flywaydb.flyway") version "6.5.0"
 }
 
 springBoot {
@@ -39,12 +40,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.kafka:spring-kafka")
-    implementation("com.h2database:h2") //todo remove after test containter injection
     implementation("org.postgresql:postgresql")
+    implementation("org.flywaydb:flyway-core")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("org.springframework.kafka:spring-kafka-test")
+    testImplementation("org.testcontainers:postgresql:1.14.+")
+    testImplementation("org.testcontainers:junit-jupiter:1.14.+")
 }
 
 tasks.withType<Test> {
@@ -64,7 +67,6 @@ kotlin {
     }
 }
 
-
 object DockerProps {
     const val BASE_IMAGE = "gcr.io/distroless/java:11"
     const val APP_PORT = "8081"
@@ -76,8 +78,29 @@ jib {
         image = DockerProps.BASE_IMAGE
     }
     container {
-        jvmFlags = parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
+        jvmFlags =
+            parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
         ports = listOf(DockerProps.APP_PORT, DockerProps.JMX_PORT)
         labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
     }
+}
+
+object FlywayProps {
+    const val DRIVER = "org.postgresql.Driver"
+    const val HOST = "localhost"
+    const val PORT = "5432"
+    const val SCHEMA = "notifications"
+    const val DB = "notifications"
+    const val USER = "user"
+    const val PASSWORD = "P@55w0rd"
+}
+
+flyway {
+    driver = FlywayProps.DRIVER
+    url =
+        "jdbc:postgresql://${FlywayProps.HOST}:${FlywayProps.PORT}/${FlywayProps.DB}?currentSchema=${FlywayProps.SCHEMA}"
+    user = FlywayProps.USER
+    password = FlywayProps.PASSWORD
+    schemas = arrayOf(FlywayProps.SCHEMA)
+    locations = arrayOf("src/main/resources/db/migration")
 }

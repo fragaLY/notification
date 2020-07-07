@@ -4,12 +4,14 @@ spring:
     lazy-initialization: false
     web-application-type: servlet
     banner-mode: off
+  lifecycle:
+    timeout-per-shutdown-phase: 60s
   jackson:
     time-zone: UTC
     locale: en_US
   datasource:
     driverClassName: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/notification?currentSchema"
+    url: "jdbc:postgresql://localhost:5432/notifications?currentSchema"
     username: "user"
     password: "P@55w0rd"
     hikari:
@@ -22,20 +24,23 @@ spring:
     properties:
       hibernate:
         default_schema: "notification"
-  lifecycle:
-    timeout-per-shutdown-phase: 60s
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    url: "jdbc:postgresql://localhost:5432/notification?currentSchema"
+    username: "user"
+    password: "P@55w0rd"
+    schemas: "notification"
   kafka:
     consumer:
       bootstrap-servers: http://localhost:9092
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: notification-events-listener-group
-    producer:
-      bootstrap-servers: http://localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.LongSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     template:
       default-topic: notification-event
+    listener:
+      ack-mode: manual
 
 # server specific properties
 server:
