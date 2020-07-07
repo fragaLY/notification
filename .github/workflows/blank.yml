@@ -81,7 +81,8 @@ jobs:
       run:
         working-directory: notification-app
     steps:
-      - uses: actions/checkout@v2
+      - name: FRONTEND CHECKOUT
+        uses: actions/checkout@v2
       - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
