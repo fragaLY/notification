@@ -83,7 +83,8 @@ jobs:
       - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
-          dockerfile: notification-app/Dockerfile
+          path: notification-app
+          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: fragaly/notification-app
