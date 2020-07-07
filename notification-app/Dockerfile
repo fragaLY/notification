@@ -1,8 +1,8 @@
 FROM node:12-alpine as builder
 WORKDIR /app
-COPY package*.json /app/
+COPY notitication-app/package*.json /app/
 RUN npm install --only=prod --silent
-COPY . /app
+COPY notitication-app /app
 RUN npm run build --prod
 
 FROM nginx:1.17.10-alpine
