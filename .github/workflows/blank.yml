@@ -77,16 +77,13 @@ jobs:
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/gateway:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
   frontend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: notification-app
     steps:
       - name: FRONTEND CHECKOUT
         uses: actions/checkout@v2
       - name: FRONTEND DOCKER IMAGE DELIVERY
         uses: docker/build-push-action@v1
         with:
-          dockerfile: Dockerfile
+          dockerfile: notification-app/Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           repository: fragaly/notification-app
