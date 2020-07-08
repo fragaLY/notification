@@ -11,7 +11,7 @@ spring:
     locale: en_US
   datasource:
     driverClassName: org.postgresql.Driver
-    url: "jdbc:postgresql://postgres:5432/notification-dev" #todo vk: after creating a config server - replace with localhost
+    url: "jdbc:postgresql://localhost:5432/notification-dev"
     username: "user"
     password: "P@55w0rd"
     hikari:
@@ -27,13 +27,13 @@ spring:
   flyway:
     enabled: true
     locations: "classpath:db/migration"
-    url: "jdbc:postgresql://postgres:5432/notification-dev" #todo vk: after creating a config server - replace with localhost
+    url: "jdbc:postgresql://localhost:5432/notification-dev"
     username: "user"
     password: "P@55w0rd"
     schemas: "notification"
   kafka:
     consumer:
-      bootstrap-servers: http://kafka:9092
+      bootstrap-servers: http://localhost:9092
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: notification-events-listener-group

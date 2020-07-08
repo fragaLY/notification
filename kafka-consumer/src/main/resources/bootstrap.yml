@@ -1,3 +1,6 @@
 spring:
   application:
     name: consumer-service
+  cloud:
+    config:
+      uri: https://github.com/fragaLY/configs

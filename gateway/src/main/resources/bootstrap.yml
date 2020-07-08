@@ -1,3 +1,6 @@
 spring:
   application:
-    name: gateway
+    name: gateway-service
+  cloud:
+    config:
+      uri: https://github.com/fragaLY/configs
