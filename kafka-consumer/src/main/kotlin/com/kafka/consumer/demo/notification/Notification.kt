@@ -17,7 +17,7 @@ enum class EventType { CREATE_NOTIFICATION, UPDATE_NOTIFICATION }
 data class NotificationEvent(val key: Long? = null, val notification: Notification, val type: EventType)
 
 @Entity
-@Table(name = "notification", catalog = "notification", schema = "notification")
+@Table(name = "notification")
 data class Notification(
 
     @Id @GeneratedValue(generator = "UUID")

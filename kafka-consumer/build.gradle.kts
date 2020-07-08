@@ -48,6 +48,7 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("org.testcontainers:postgresql:1.14.+")
     testImplementation("org.testcontainers:junit-jupiter:1.14.+")
+    testImplementation("com.h2database:h2")
 }
 
 tasks.withType<Test> {
@@ -85,22 +86,22 @@ jib {
     }
 }
 
-object FlywayProps {
-    const val DRIVER = "org.postgresql.Driver"
-    const val HOST = "localhost"
-    const val PORT = "5432"
-    const val SCHEMA = "notifications"
-    const val DB = "notifications"
-    const val USER = "user"
-    const val PASSWORD = "P@55w0rd"
-}
-
-flyway {
-    driver = FlywayProps.DRIVER
-    url =
-        "jdbc:postgresql://${FlywayProps.HOST}:${FlywayProps.PORT}/${FlywayProps.DB}?currentSchema=${FlywayProps.SCHEMA}"
-    user = FlywayProps.USER
-    password = FlywayProps.PASSWORD
-    schemas = arrayOf(FlywayProps.SCHEMA)
-    locations = arrayOf("src/main/resources/db/migration")
-}
+// object FlywayProps {
+//     const val DRIVER = "org.postgresql.Driver"
+//     const val HOST = "localhost"
+//     const val PORT = "5432"
+//     const val SCHEMA = "notifications"
+//     const val DB = "notifications"
+//     const val USER = "user"
+//     const val PASSWORD = "P@55w0rd"
+// }
+//
+// flyway {
+//     driver = FlywayProps.DRIVER
+//     url =
+//         "jdbc:postgresql://${FlywayProps.HOST}:${FlywayProps.PORT}/${FlywayProps.DB}?currentSchema=${FlywayProps.SCHEMA}"
+//     user = FlywayProps.USER
+//     password = FlywayProps.PASSWORD
+//     schemas = arrayOf(FlywayProps.SCHEMA)
+//     locations = arrayOf("src/main/resources/db/migration")
+// }
