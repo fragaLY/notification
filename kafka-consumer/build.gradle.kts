@@ -79,8 +79,8 @@ kotlin {
 
 object DockerProps {
     const val BASE_IMAGE = "gcr.io/distroless/java:11"
-    const val APP_PORT = "8081"
-    const val JMX_PORT = "38081"
+    const val APP_PORT = "8084"
+    const val JMX_PORT = "38084"
 }
 
 jib {

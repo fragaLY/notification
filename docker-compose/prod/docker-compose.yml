@@ -78,7 +78,7 @@ services:
       - gateway
       - config-server
     ports:
-      - 8080:8080
+      - 8083:8083
 
   consumer:
     image: fragaly/consumer
@@ -90,7 +90,7 @@ services:
       - gateway
       - config-server
     ports:
-      - 8083:8083
+      - 8084:8084
 
   frontend:
     image: fragaly/web
