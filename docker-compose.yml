@@ -70,24 +70,24 @@ services:
     ports:
       - 8080:8080
 
-#  consumer:
-#    image: fragaly/consumer
-#    hostname: consumer
-#    container_name: consumer
-#    restart: on-failure
-#    depends_on:
-#      - schemaregistry
-#      - gateway
-#    ports:
-#      - 8083:8083
+  consumer:
+    image: fragaly/consumer
+    hostname: consumer
+    container_name: consumer
+    restart: on-failure
+    depends_on:
+      - schema-registry
+      - gateway
+    ports:
+      - 8083:8083
 
-#  frontend:
-#    image: fragaly/web
-#    hostname: web
-#    container_name: web
-#    restart: on-failure
-#    depends_on:
-#      - consumer
-#      - producer
-#    ports:
-#      - 80:80
+  frontend:
+    image: fragaly/web
+    hostname: web
+    container_name: web
+    restart: on-failure
+    depends_on:
+      - consumer
+      - producer
+    ports:
+      - 80:80

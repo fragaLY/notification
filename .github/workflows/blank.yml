@@ -90,5 +90,5 @@ jobs:
           dockerfile: notification-app/Dockerfile
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          repository: fragaly/notification-app
+          repository: fragaly/web
           tags: latest
