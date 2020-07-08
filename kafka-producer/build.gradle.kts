@@ -47,6 +47,12 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka-test")
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }

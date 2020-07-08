@@ -21,7 +21,7 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 application {
-    mainClassName = "com.kafka.producer.demo.NotificationConsumerKt"
+    mainClassName = "com.kafka.consumer.demo.NotificationConsumerKt"
     applicationName = "kafka-consumer"
 }
 
@@ -52,6 +52,12 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.14.+")
     testImplementation("org.testcontainers:junit-jupiter:1.14.+")
     testImplementation("com.h2database:h2")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks.withType<Test> {
