@@ -11,6 +11,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=P@55w0rd
+      - POSTGRES_DB=notification-dev
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.0.4

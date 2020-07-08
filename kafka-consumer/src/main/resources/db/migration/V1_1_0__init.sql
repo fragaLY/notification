@@ -7,5 +7,5 @@ CREATE TABLE notification
   sender                varchar(25)           NOT NULL,
   receiver              varchar(25)           NOT NULL,
 
-  CONSTRAINT "pk_notification.notification" PRIMARY KEY (id)
+  CONSTRAINT "pk_event_notification.notification" PRIMARY KEY (id)
 );

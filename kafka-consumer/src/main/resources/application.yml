@@ -11,7 +11,7 @@ spring:
     locale: en_US
   datasource:
     driverClassName: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/notifications?currentSchema"
+    url: "jdbc:postgresql://localhost:5432/notification-dev"
     username: "user"
     password: "P@55w0rd"
     hikari:
@@ -26,11 +26,11 @@ spring:
         default_schema: "notification"
   flyway:
     enabled: true
-    locations: classpath:db/migration
-    url: "jdbc:postgresql://localhost:5432/notification?currentSchema"
+    locations: "classpath:db/migration"
+    url: "jdbc:postgresql://localhost:5432/notification-dev"
     username: "user"
     password: "P@55w0rd"
-    default-schema: "notification"
+    schemas: "notification"
   kafka:
     consumer:
       bootstrap-servers: http://localhost:9092
