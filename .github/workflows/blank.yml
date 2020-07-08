@@ -75,6 +75,27 @@ jobs:
       - name: GATEWAY DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/gateway:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
+#  todo config-server:
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        shell: bash
+#        working-directory: config-server
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: ${{ secrets.JAVA_VERSION }}
+#          architecture: x64
+#      - name: GRADLE PREPARATION
+#        run: chmod +x gradlew
+#      - name: CONFIG SERVER COMPILATION
+#        run: ./gradlew compileKotlin -x compileJava --parallel
+#      - name: CONFIG SERVER BUILD
+#        run: ./gradlew build -x test -x compileJava --parallel
+#      - name: CONFIG SERVER DOCKER DELIVERY
+#        if: github.ref == 'refs/heads/master'
+#        run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/config-server:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
   frontend:
     runs-on: ubuntu-latest
     defaults:

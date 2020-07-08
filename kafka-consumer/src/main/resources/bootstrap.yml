@@ -3,4 +3,4 @@ spring:
     name: consumer-service
   cloud:
     config:
-      uri: https://github.com/fragaLY/configs
+      uri: http://config-server:8088

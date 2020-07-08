@@ -52,6 +52,14 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
 
+  config-server:
+    image: fragaly/config-server
+      hostname: config-server
+      container_name: config-server
+      restart: on-failure
+      ports:
+        - 8088:8088
+
   gateway:
     image: fragaly/gateway
     hostname: gateway
@@ -68,6 +76,7 @@ services:
     depends_on:
       - schema-registry
       - gateway
+      - config-server
     ports:
       - 8080:8080
 
@@ -79,6 +88,7 @@ services:
     depends_on:
       - schema-registry
       - gateway
+      - config-server
     ports:
       - 8083:8083
 
@@ -88,7 +98,6 @@ services:
     container_name: web
     restart: on-failure
     depends_on:
-      - consumer
       - producer
     ports:
       - 80:80
