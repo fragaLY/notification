@@ -43,6 +43,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.kafka:spring-kafka")
+    implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+    implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
 }

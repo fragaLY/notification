@@ -8,3 +8,9 @@ spring:
         git:
           uri: https://github.com/fragaLY/configs.git
           clone-on-start: true
+
+logging:
+  level:
+    org.springframework: info
+    org.springframework.cloud: info
+    by.vk.configserver: info

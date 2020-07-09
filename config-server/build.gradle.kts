@@ -36,6 +36,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.springframework.cloud:spring-cloud-config-server")
+	implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
+	implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
 }
 
 dependencyManagement {

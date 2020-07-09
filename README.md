@@ -12,6 +12,7 @@
 * Postgres, Flyway, Test containers;
 * Gradle Kts, Jib, Docker compose;
 * Jetty, Undertow, Netty, Nginx; 
+* Logback;
 * Github CI;
 
 ##### IN PROGRESS:
