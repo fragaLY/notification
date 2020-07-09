@@ -9,10 +9,10 @@
             <appendLineSeparator>true</appendLineSeparator>
         </layout>
     </appender>
-    <logger name="jsonLogger" level="DEBUG">
+    <logger name="jsonLogger" level="INFO">
         <appender-ref ref="json" />
     </logger>
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="json"/>
     </root>
 </configuration>

@@ -8,7 +8,7 @@ class NotificationService {
     create(event) {
         return http
             .post(`${NOTIFICATIONS}`, event, {
-                headers: {'X-CSRF-TOKEN': 'e2c96294-5a05-4dbb-b72c-87fd61eebe5e'} //todo: replace with real csrf token
+                headers: {'X-CSRF-TOKEN': 'e2c96294-5a05-4dbb-b72c-87fd61eebe5e'}
             })
             .then(response => {
                 if (response.status === 204) {
@@ -22,7 +22,7 @@ class NotificationService {
     update(event) {
         return http
             .put(`${NOTIFICATIONS}/${event.notification.id}`, event, {
-                headers: {'X-CSRF-TOKEN': 'e2c96294-5a05-4dbb-b72c-87fd61eebe5e'} //todo: replace with real csrf token
+                headers: {'X-CSRF-TOKEN': 'e2c96294-5a05-4dbb-b72c-87fd61eebe5e'}
             })
             .then(response => {
                 if (response.status === 204) {
