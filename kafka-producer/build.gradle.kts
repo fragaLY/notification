@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.util.parseSpaceSeparatedArgs
 
 plugins {
     application
-    id("org.springframework.boot") version "2.3.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
-    id("com.google.cloud.tools.jib") version "2.4.0"
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("com.google.cloud.tools.jib")
 }
 
 springBoot {
@@ -29,20 +29,21 @@ repositories {
 
 extra["springCloudVersion"] = "Hoxton.SR6"
 
+configurations.all {
+    exclude(group = "org.springframework.boot", module ="spring-boot-starter-tomcat")
+    exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+}
+
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web") {
-        exclude("org.springframework.boot", "spring-boot-starter-tomcat")
-    }
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.springframework.boot:spring-boot-starter-jetty")
+    implementation("org.springframework.boot:spring-boot-starter-undertow")
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.kafka:spring-kafka")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
 }
 

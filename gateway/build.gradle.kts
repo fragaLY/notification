@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.util.parseSpaceSeparatedArgs
 
 plugins {
     application
-    id("org.springframework.boot") version "2.3.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
-    id("com.google.cloud.tools.jib") version "2.4.0"
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    kotlin("jvm")
+    kotlin("plugin.spring")
+    id("com.google.cloud.tools.jib")
 }
 
 springBoot {
@@ -29,6 +29,10 @@ repositories {
 
 extra["springCloudVersion"] = "Hoxton.SR6"
 
+configurations.all {
+    exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+}
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -36,9 +40,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
     implementation("io.github.resilience4j:resilience4j-spring-boot2:1.5.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 dependencyManagement {

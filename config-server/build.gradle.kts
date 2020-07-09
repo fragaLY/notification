@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.util.parseSpaceSeparatedArgs
 
 plugins {
 	application
-	id("org.springframework.boot") version "2.3.1.RELEASE"
-	id("io.spring.dependency-management") version "1.0.9.RELEASE"
-	kotlin("jvm") version "1.3.72"
-	kotlin("plugin.spring") version "1.3.72"
-	id("com.google.cloud.tools.jib") version "2.4.0"
+	id("org.springframework.boot")
+	id("io.spring.dependency-management")
+	kotlin("jvm")
+	kotlin("plugin.spring")
+	id("com.google.cloud.tools.jib")
 }
 
 group = "by.vk"
@@ -25,10 +25,12 @@ repositories {
 
 extra["springCloudVersion"] = "Hoxton.SR6"
 
+configurations.all {
+	exclude(group = "org.springframework.boot", module ="spring-boot-starter-tomcat")
+}
+
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web") {
-		exclude("org.springframework.boot", "spring-boot-starter-tomcat")
-	}
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-jetty")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
