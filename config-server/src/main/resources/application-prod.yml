@@ -1,0 +1,18 @@
+server:
+  port: 8088
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_CONFIG_URL}
+          username: ${GIT_USERNAME}
+          password: ${GIT_PASSWORD}
+          force-pull: true
+
+logging:
+  level:
+    org.springframework: info
+    org.springframework.cloud: info
+    by.vk.configserver: info

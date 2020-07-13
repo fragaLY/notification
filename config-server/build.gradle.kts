@@ -71,7 +71,7 @@ jib {
 		env["GIT_CONFIG_URL"] = System.getenv("GIT_CONFIG_URL")
 		environment = env
 		jvmFlags =
-			parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
+			parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} -Dspring.profiles.active=prod")
 		ports = listOf(DockerProps.APP_PORT, DockerProps.JMX_PORT)
 		labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
 	}
