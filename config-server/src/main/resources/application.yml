@@ -6,7 +6,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/fragaLY/notification-configs.git
+          uri: http://github.com/fragaLY/notification-configs.git
           clone-on-start: true
 
 logging:
