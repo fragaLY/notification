@@ -65,9 +65,13 @@ jib {
 		image = DockerProps.BASE_IMAGE
 	}
 	container {
-		System.out.println("GithubName = " + System.getProperty("GITHUB_USERNAME"))
+		val env = HashMap<String, String>()
+		env["GIT_USERNAME"] = System.getenv("GIT_USERNAME")
+		env["GIT_PASSWORD"] = System.getenv("GIT_PASSWORD")
+		env["GIT_CONFIG_URL"] = System.getenv("GIT_CONFIG_URL")
+		environment = env
 		jvmFlags =
-			parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} --spring.cloud.config.server.git.username=${System.getProperty("GITHUB_USERNAME")} --spring.cloud.config.server.git.password=${System.getProperty("GITHUB_PASSWORD")}")
+			parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT}")
 		ports = listOf(DockerProps.APP_PORT, DockerProps.JMX_PORT)
 		labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
 	}

@@ -95,6 +95,7 @@ jobs:
         run: ./gradlew build -x test -x compileJava --parallel
       - name: CONFIG SERVER DOCKER DELIVERY
         env:
+          GIT_CONFIG_URL: https://github.com/fragaLY/notification-configs.git
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         if: github.ref == 'refs/heads/master'
