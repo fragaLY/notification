@@ -89,8 +89,8 @@ jobs:
           architecture: x64
       - name: GET SECRETS
         run: |
-          echo ${GIT_CONFIG_URL}
-          echo "::set-env name=GIT_CONFIG_URL::{GIT_CONFIG_URL}"
+          echo "${GIT_CONFIG_URL}"
+          echo "::set-env name=GIT_CONFIG_URL::{{secrets.GIT_CONFIG_URL}}"
       - run: echo $GIT_CONFIG_URL
       - name: GRADLE PREPARATION
         env:
