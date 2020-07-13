@@ -6,8 +6,10 @@ spring:
     config:
       server:
         git:
-          uri: http://github.com/fragaLY/notification-configs.git
-          clone-on-start: true
+          uri: https://github.com/fragaLY/notification-configs.git
+          username: ${GIT_USERNAME}
+          password: ${GIT_PASSWORD}
+          force-pull: true
 
 logging:
   level:

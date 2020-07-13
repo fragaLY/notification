@@ -94,6 +94,9 @@ jobs:
       - name: CONFIG SERVER BUILD
         run: ./gradlew build -x test -x compileJava --parallel
       - name: CONFIG SERVER DOCKER DELIVERY
+        with:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/config-server:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
   frontend:
