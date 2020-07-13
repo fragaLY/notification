@@ -91,8 +91,16 @@ jobs:
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: CONFIG SERVER COMPILATION
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          GIT_CONFIG_URL: ${{ secrets.GIT_CONFIG_URL }}
         run: ./gradlew compileKotlin -x compileJava --parallel
       - name: CONFIG SERVER BUILD
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          GIT_CONFIG_URL: ${{ secrets.GIT_CONFIG_URL }}
         run: ./gradlew build -x test -x compileJava --parallel
       - name: CONFIG SERVER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
