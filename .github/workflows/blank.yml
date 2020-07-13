@@ -87,9 +87,14 @@ jobs:
         with:
           java-version: ${{ secrets.JAVA_VERSION }}
           architecture: x64
+      - name: GET SECRETS
+        run: |
+          echo ${GIT_CONFIG_URL}
+          echo "::set-env name=GIT_CONFIG_URL::{GIT_CONFIG_URL}"
+      - run: echo $GIT_CONFIG_URL
       - name: GRADLE PREPARATION
         env:
-          GIT_CONFIG_URL: https://github.com/fragaLY/notification-configs.git
+          GIT_CONFIG_URL:  ${{ secrets.GIT_CONFIG_URL }}
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: chmod +x gradlew
