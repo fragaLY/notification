@@ -27,7 +27,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "Hoxton.SR6"
+extra["springCloudVersion"] = "Hoxton.SR5"
 
 configurations.all {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

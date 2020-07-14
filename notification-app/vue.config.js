@@ -4,7 +4,7 @@ module.exports = {
             "/api/*": {
                 warnings: true,
                 errors: true,
-                target: "http://localhost:8082/",
+                target: "http://localhost:8083/", //todo vk: move to gateway port
                 secure: false
             }
         }
