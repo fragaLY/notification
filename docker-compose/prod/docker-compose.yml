@@ -72,7 +72,6 @@ services:
 
   producer:
     image: fragaly/producer
-    hostname: producer
     container_name: producer-prod
     restart: on-failure
     depends_on:
@@ -83,7 +82,6 @@ services:
 
   consumer:
     image: fragaly/consumer
-    hostname: consumer
     container_name: consumer-prod
     restart: on-failure
     depends_on:
