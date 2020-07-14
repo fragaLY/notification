@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.util.concurrent.ListenableFutureCallback
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -36,6 +37,7 @@ data class NotificationEvent(
     val type: EventType?
 )
 
+@CrossOrigin(origins = ["http://localhost:80"])
 @RequestMapping("/api/notifications")
 interface Api {
 

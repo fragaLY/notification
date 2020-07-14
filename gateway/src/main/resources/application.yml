@@ -1,19 +1,13 @@
 server:
   port: 8082
 
-logging:
-  level:
-    root: INFO
-    org.springframework.cloud.gateway: INFO
-    reactor.netty.http.client: INFO
-
 spring:
   cloud:
     gateway:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:8085"
+            allowedOrigins: "http://localhost:80"
             allowedMethods:
               - POST
               - PUT
@@ -23,7 +17,6 @@ spring:
           predicates:
             - Path=/api/notifications/**
             - Header=X-CSRF-TOKEN, [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}
-            - Host=**localhost**
           filters:
             - name: NotificationPreFilter
             - name: NotificationPostFilter
@@ -36,3 +29,9 @@ resilience4j.timelimiter:
   instances:
     notification-service:
       timeoutDuration: 250ms
+
+logging:
+  level:
+    org.springframework: debug
+    org.springframework.cloud: debug
+    com.api.gateway.demo: debug
