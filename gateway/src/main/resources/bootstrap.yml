@@ -4,3 +4,4 @@ spring:
   cloud:
     config:
       uri: http://config-server-prod:8088
+      fail-fast: true

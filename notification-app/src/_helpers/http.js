@@ -4,7 +4,7 @@ import store from "../_store";
 const instance = axios.create({
     withCredentials: false,
     timeout: 10000,
-    baseURL: "http://producer-prod:8083"
+    baseURL: "http://gateway-prod:8082"
 });
 
 instance.interceptors.response.use(response => {

@@ -1,101 +1,68 @@
 version: '3.7'
 services:
 
-  config-server:
+  config-server-prod:
     image: fragaly/config-server
-    hostname: config-server
-    container_name: config-server-prod
     restart: on-failure
-    ports:
-      - 8088:8088
 
-  postgres:
+  postgres-prod:
     image: postgres:12.3
-    container_name: postgres-prod
-    hostname: postgres
     restart: on-failure
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=P@55w0rd
       - POSTGRES_DB=notification-dev
 
-  zookeeper:
+  zookeeper-prod:
     image: confluentinc/cp-zookeeper:5.0.4
-    hostname: zookeeper
-    container_name: cp-zookeeper-prod
     ports:
       - 2181:2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  kafka:
+  kafka-prod:
     image: confluentinc/cp-kafka:5.0.4
-    hostname: kafka
-    container_name: cp-kafka-prod
     depends_on:
-      - zookeeper
-    ports:
-      - 9092:9092
+      - zookeeper-prod
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-prod:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
-  schema-registry:
+  schema-registry-prod:
     image: confluentinc/cp-schema-registry:5.0.4
-    hostname: schema-registry
-    container_name: schema-registry-prod
     restart: always
     depends_on:
-      - zookeeper
-      - kafka
-    ports:
-      - 8081:8081
+      - kafka-prod
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper-prod:2181
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry-prod
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry-prod:8081
 
-  gateway:
+  gateway-prod:
     image: fragaly/gateway
-    hostname: gateway
-    container_name: gateway-prod
     restart: on-failure
     depends_on:
-      - config-server
-    ports:
-      - 8082:8082
+      - config-server-prod
 
-  producer:
+  producer-prod:
     image: fragaly/producer
-    container_name: producer-prod
     restart: on-failure
     depends_on:
-      - schema-registry
-      - gateway
-    ports:
-      - 8083:8083
+      - schema-registry-prod
+      - gateway-prod
 
-  consumer:
+  consumer-prod:
     image: fragaly/consumer
-    container_name: consumer-prod
     restart: on-failure
     depends_on:
-      - schema-registry
-      - gateway
-    ports:
-      - 8084:8084
+      - schema-registry-prod
+      - gateway-prod
 
-  frontend:
+  web-prod:
     image: fragaly/web
-    hostname: web
-    container_name: web-prod
     restart: on-failure
-    depends_on:
-      - producer
     ports:
       - 80:80
