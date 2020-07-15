@@ -4,7 +4,7 @@ import store from "../_store";
 const instance = axios.create({
     withCredentials: false,
     timeout: 10000,
-    baseURL: "http://localhost:8083" //todo vk: move to gateway port
+    baseURL: "http://producer-prod:8083"
 });
 
 instance.interceptors.response.use(response => {
