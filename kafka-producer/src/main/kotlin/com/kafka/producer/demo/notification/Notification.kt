@@ -30,7 +30,7 @@ data class NotificationEvent(
     val type: EventType?
 )
 
-@CrossOrigin(origins = ["http://localhost"], methods = [RequestMethod.POST, RequestMethod.PUT])
+@CrossOrigin(origins = ["http://localhost"])
 @RequestMapping("/api/notifications")
 interface Api {
 
