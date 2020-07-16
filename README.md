@@ -16,7 +16,7 @@
 * Github CI;
 
 ##### IN PROGRESS:
-* Spring Admin Management Client
+* Spring Admin Management Client;
 * Avro;
 * Orika;
 * Spring Cache + Ehcache;
