@@ -37,7 +37,6 @@ data class NotificationEvent(
     val type: EventType?
 )
 
-@CrossOrigin(origins = ["http://localhost:8082", "http://gateway:8082"])
 @RequestMapping("/api/notifications")
 interface Api {
 
