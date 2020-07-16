@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
 
 /** @author Vadzim_Kavalkou */
 @WebMvcTest(Controller::class)
@@ -115,7 +116,7 @@ class ControllerUnitTest {
         doNothing().`when`(service).create(event)
 
         // when
-        mvc.perform(put("/api/notifications/1").content(payload).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/api/notifications/${UUID.randomUUID()}").content(payload).contentType(MediaType.APPLICATION_JSON))
             //then
             .andExpect(status().isNoContent)
     }
@@ -127,7 +128,7 @@ class ControllerUnitTest {
         val payload = mapper.writeValueAsString(notification)
 
         // when
-        mvc.perform(put("/api/notifications/1").content(payload).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/api/notifications/${UUID.randomUUID()}").content(payload).contentType(MediaType.APPLICATION_JSON))
             //then
             .andExpect(status().isBadRequest)
     }

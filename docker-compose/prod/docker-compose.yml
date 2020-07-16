@@ -41,6 +41,19 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry-prod
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry-prod:8081
 
+  kafka-ui-prod:
+    image: obsidiandynamics/kafdrop
+    restart: on-failure
+    depends_on:
+      - schema-registry-prod
+    environment:
+      KAFKA_BROKERCONNECT: kafka-prod:9092
+      SERVER_SERVLET_CONTEXTPATH: /
+      SCHEMAREGISTRY_CONNECT: http://schema-registry-prod:8081
+      JVM_OPTS: "-Xms32M -Xmx64M"
+    ports:
+      - 9000:9000
+
   gateway-prod:
     image: fragaly/gateway
     restart: on-failure

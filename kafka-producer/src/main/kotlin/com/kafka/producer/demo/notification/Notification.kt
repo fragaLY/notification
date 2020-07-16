@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.util.concurrent.ListenableFutureCallback
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull
 enum class EventType { CREATE_NOTIFICATION, UPDATE_NOTIFICATION }
 
 data class Notification(
-    val id: Long?,
+   val id: UUID?,
     @field:NotBlank(message = "The sender should not be blank") val sender: String,
     @field:NotBlank(message = "The receiver should not be blank") val receiver: String
 )
@@ -41,7 +42,7 @@ interface Api {
     @PutMapping(value = ["/{id}"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(
-        @NotNull(message = "The notification id cannot be null") @PathVariable id: Long,
+        @NotNull(message = "The notification id cannot be null") @PathVariable id: UUID,
         @NotNull(message = "The event cannot be null") @Valid @RequestBody event: NotificationEvent
     ): ResponseEntity<Unit>
 }
@@ -51,7 +52,7 @@ class Controller(private val service: NotificationService) : Api {
     override fun create(event: NotificationEvent) =
         service.create(event).run { ResponseEntity.noContent().build<Unit>() }
 
-    override fun update(id: Long, event: NotificationEvent) =
+    override fun update(id: UUID, event: NotificationEvent) =
         service.update(id, event).run { ResponseEntity.noContent().build<Unit>() }
 }
 
@@ -62,7 +63,7 @@ class NotificationService(private val producer: EventProducer) {
         event.copy(type = EventType.CREATE_NOTIFICATION, notification = event.notification.copy(id = null))
     )
 
-    fun update(id: Long, event: NotificationEvent) = producer.produce(
+    fun update(id: UUID, event: NotificationEvent) = producer.produce(
         event.copy(type = EventType.UPDATE_NOTIFICATION, notification = event.notification.copy(id = id))
     )
 }

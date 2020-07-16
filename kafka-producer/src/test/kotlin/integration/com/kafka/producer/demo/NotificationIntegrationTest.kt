@@ -20,6 +20,8 @@ import org.springframework.http.MediaType
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.kafka.test.utils.KafkaTestUtils
+import java.util.*
+import kotlin.collections.HashMap
 
 /** @author Vadzim_Kavalkou */
 internal class NotificationIntegrationTest : IntegrationTest() {
@@ -49,7 +51,7 @@ internal class NotificationIntegrationTest : IntegrationTest() {
         // given
         val headers = HttpHeaders()
         headers.accept = listOf(MediaType.APPLICATION_JSON)
-        val request = HttpEntity(NotificationEvent(1L, Notification(2L, "from", "to"), null), headers)
+        val request = HttpEntity(NotificationEvent(1L, Notification(UUID.randomUUID(), "from", "to"), null), headers)
         val expected =
             """{"key":1,"notification":{"id":null,"sender":"from","receiver":"to"},"type":"CREATE_NOTIFICATION"}"""
 
@@ -81,14 +83,15 @@ internal class NotificationIntegrationTest : IntegrationTest() {
     @Test
     fun `test updating notification when notification is valid`() {
         // given
+        val id = UUID.randomUUID()
         val headers = HttpHeaders()
         headers.accept = listOf(MediaType.APPLICATION_JSON)
-        val request = HttpEntity(NotificationEvent(1L, Notification(2L, "from", "to"), null), headers)
+        val request = HttpEntity(NotificationEvent(1L, Notification(id, "from", "to"), null), headers)
         val expected =
-            """{"key":1,"notification":{"id":1,"sender":"from","receiver":"to"},"type":"UPDATE_NOTIFICATION"}"""
+            """{"key":1,"notification":{"id":"$id","sender":"from","receiver":"to"},"type":"UPDATE_NOTIFICATION"}"""
 
         // when
-        val actual = restTemplate.exchange("/api/notifications/1", HttpMethod.PUT, request, Void::class.java)
+        val actual = restTemplate.exchange("/api/notifications/$id", HttpMethod.PUT, request, Void::class.java)
 
         // then
         assertEquals(HttpStatus.NO_CONTENT, actual.statusCode)

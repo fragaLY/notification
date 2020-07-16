@@ -14,6 +14,7 @@
 * Jetty, Undertow, Netty, Nginx; 
 * Logback;
 * Github CI;
+* [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
 * Spring Admin Management Client;

@@ -43,7 +43,7 @@ class NotificationService(private val repository: NotificationRepository) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun create(notification: Notification) = repository.save(notification)
-            .apply { logger.debug("[CONSUMER] The notification with id [${this.id}] have been created")}
+            .apply { logger.debug("[CONSUMER] The notification with id [${this.id}] has been created")}
 
     fun update(notification: Notification) =
         if (notification.id == null) throw IllegalArgumentException("The notification should not be null for update request")
