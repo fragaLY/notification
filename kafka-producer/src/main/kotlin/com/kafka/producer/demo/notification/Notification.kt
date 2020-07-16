@@ -11,14 +11,7 @@ import org.springframework.lang.Nullable
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.util.concurrent.ListenableFutureCallback
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -37,7 +30,7 @@ data class NotificationEvent(
     val type: EventType?
 )
 
-@CrossOrigin(origins = ["http://gateway:8082"])
+@CrossOrigin(origins = ["http://localhost"], methods = [RequestMethod.POST, RequestMethod.PUT])
 @RequestMapping("/api/notifications")
 interface Api {
 
