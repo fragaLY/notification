@@ -58,14 +58,23 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 object DockerProps {
     const val BASE_IMAGE = "gcr.io/distroless/java:11"
     const val APP_PORT = "8082"
+    const val DEBUG_PORT = "5082"
     const val JMX_PORT = "38082"
+}
+
+object JVMProps {
+    const val XMX = "256m"
+    const val XMS = "64m"
+    const val MAX_METASPACE_SIZE = "64m"
+    const val MAX_DIRECT_MEMORY_SIZE = "128m"
+    const val HEAPDUMP_PATH = "/opt/tmp/heapdump.bin"
 }
 
 jib {
@@ -73,8 +82,8 @@ jib {
         image = DockerProps.BASE_IMAGE
     }
     container {
-        jvmFlags = parseSpaceSeparatedArgs("-noverify -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} -Dspring.profiles.active=prod")
-        ports = listOf(DockerProps.APP_PORT, DockerProps.JMX_PORT)
+        jvmFlags = parseSpaceSeparatedArgs("-noverify -Xmx${JVMProps.XMX} -Xms${JVMProps.XMS} -XX:MaxMetaspaceSize=${JVMProps.MAX_METASPACE_SIZE} -XX:MaxDirectMemorySize=${JVMProps.MAX_DIRECT_MEMORY_SIZE} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JVMProps.HEAPDUMP_PATH} -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} -Dspring.profiles.active=prod")
+        ports = listOf(DockerProps.APP_PORT, DockerProps.DEBUG_PORT, DockerProps.JMX_PORT)
         labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
     }
 }
