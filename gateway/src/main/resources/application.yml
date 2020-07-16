@@ -8,7 +8,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:8085"
+              - "http://localhost"
             allowedMethods:
               - POST
               - PUT
