@@ -19,7 +19,6 @@
 ##### IN PROGRESS:
 * Spring Admin Management Client;
 * Avro;
-* Orika;
 * Spring Cache + Ehcache;
 * OPENAPI 3;
 * Resilience4j;
