@@ -34,8 +34,14 @@ jobs:
         with:
           image: "producer:latest"
           fail-build: true
-      - name: GRYPE SCAN RESULTS
-        run: for j in `ls ./anchore-reports/*.json`; do echo "---- ${j} ----"; cat ${j}; echo; done
+          acs-report-enable: true
+          severity-cutoff: critical
+      - name: UPLOAD ANCHORE SCAN SARIF REPORT
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: INSPECT ACTION SARIF REPORT
+        run: cat ${{ steps.scan.outputs.sarif }}
       - name: PRODUCER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/producer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -60,6 +66,21 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: CONSUMER BUILD
         run: ./gradlew build -x test -x compileJava --parallel
+      - name: CONSUMER DOCKER BUILD IMAGE
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jibDockerBuild --image=consumer:latest
+      - uses: anchore/scan-action@v2
+        with:
+          image: "consumer:latest"
+          fail-build: true
+          acs-report-enable: true
+          severity-cutoff: critical
+      - name: UPLOAD ANCHORE SCAN SARIF REPORT
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: INSPECT ACTION SARIF REPORT
+        run: cat ${{ steps.scan.outputs.sarif }}
       - name: CONSUMER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/consumer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -84,6 +105,21 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: GATEWAY BUILD
         run: ./gradlew build -x test -x compileJava --parallel
+      - name: GATEWAY DOCKER BUILD IMAGE
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jibDockerBuild --image=gateway:latest
+      - uses: anchore/scan-action@v2
+        with:
+          image: "gateway:latest"
+          fail-build: true
+          acs-report-enable: true
+          severity-cutoff: critical
+      - name: UPLOAD ANCHORE SCAN SARIF REPORT
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: INSPECT ACTION SARIF REPORT
+        run: cat ${{ steps.scan.outputs.sarif }}
       - name: GATEWAY DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/gateway:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -115,6 +151,21 @@ jobs:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           GIT_CONFIG_URL: ${{ secrets.GIT_CONFIG_URL }}
         run: ./gradlew build -x test -x compileJava --parallel
+      - name: CONFIG SERVER DOCKER BUILD IMAGE
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jibDockerBuild --image=config-server:latest
+      - uses: anchore/scan-action@v2
+        with:
+          image: "config-server:latest"
+          fail-build: true
+          acs-report-enable: true
+          severity-cutoff: critical
+      - name: UPLOAD ANCHORE SCAN SARIF REPORT
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+      - name: INSPECT ACTION SARIF REPORT
+        run: cat ${{ steps.scan.outputs.sarif }}
       - name: CONFIG SERVER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         env:
@@ -148,6 +199,7 @@ jobs:
         with:
           builder: ${{ steps.builder.outputs.name }}
           context: .
+          load: true
           tags: fragaly/web:latest
       - uses: anchore/scan-action@v2
         with:
