@@ -157,8 +157,8 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: INSPECT ACTION SARIF REPORT
         run: cat ${{ steps.scan.outputs.sarif }}
-      - name: BUILD WEB DOCKER IMAGE
-        id: docker_build
+      - name: PUSH WEB DOCKER IMAGE
+        id: docker_push
         uses: docker/build-push-action@v2
         with:
           context: .
