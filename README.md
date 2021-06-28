@@ -14,9 +14,11 @@
 * Jetty, Undertow, Netty, Nginx; 
 * Logback;
 * Github CI;
+* Grype;
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
+* Scan Docker Image;
 * Kafka EOS;
 * Resilience4j;
 * Prometheus;

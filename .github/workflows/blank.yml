@@ -27,6 +27,15 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: PRODUCER BUILD
         run: ./gradlew build -x test -x compileJava --parallel
+      - name: PRODUCER DOCKER BUILD IMAGE
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew jibDockerBuild --image=producer:latest
+      - uses: anchore/scan-action@v2
+        with:
+          image: "producer:latest"
+          fail-build: true
+      - name: GRYPE SCAN RESULTS
+        run: for j in `ls ./anchore-reports/*.json`; do echo "---- ${j} ----"; cat ${j}; echo; done
       - name: PRODUCER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/producer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -136,4 +145,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: fragaly/web:0.0.1, integr8ed/challenger-client:latest
+          tags: fragaly/web:0.0.1, fragaly/web:latest
+      - uses: anchore/scan-action@v2
+        with:
+          image: "fragaly/web:latest"
+          fail-build: true
+      - name: grype scan JSON results
+        run: for j in `ls ./anchore-reports/*.json`; do echo "---- ${j} ----"; cat ${j}; echo; done
