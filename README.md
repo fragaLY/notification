@@ -14,17 +14,18 @@
 * Jetty, Undertow, Netty, Nginx; 
 * Logback;
 * Github CI;
+* KeyCloak;
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
-* Spring Admin Management Client;
-* Avro;
-* Spring Cache + Ehcache;
-* OPENAPI 3;
 * Resilience4j;
-* Debezium for Outbox + Delay Queue;
-* Minicube migration;
 * Prometheus;
 * Grafana;
 * Kibana;
-* Security.
+* KeyCloak;
+* Spring Admin Management Client;
+* Avro;
+* OPENAPI 3;
+* Debezium for Outbox + Delay Queue;
+* Spring Cache + Ehcache;
+* Minicube migration.
