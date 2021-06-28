@@ -9,7 +9,7 @@
 * Kotlin, VueJS;
 * Spring Boot, Spring Gateway, Spring Config Server;
 * Kafka, Schema registry;
-* Postgres, Flyway, Test containers;
+* Postgres, Flyway, Test conta  iners;
 * Gradle Kts, Jib, Docker compose;
 * Jetty, Undertow, Netty, Nginx; 
 * Logback;
@@ -18,7 +18,7 @@
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
-* Scan Docker Image;
+* Ktlint Scan;
 * Kafka EOS;
 * Resilience4j;
 * Prometheus;
