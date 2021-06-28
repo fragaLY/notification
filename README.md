@@ -14,7 +14,6 @@
 * Jetty, Undertow, Netty, Nginx; 
 * Logback;
 * Github CI;
-* KeyCloak;
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
@@ -23,6 +22,7 @@
 * Prometheus;
 * Grafana;
 * Kibana;
+* Zipkin
 * KeyCloak;
 * Spring Admin Management Client;
 * Avro;
@@ -30,4 +30,4 @@
 * Debezium for Outbox + Delay Queue;
 * Spring Cache + Ehcache;
 * SemVer;
-* Minicube migration.
+* Kubernetes migration.

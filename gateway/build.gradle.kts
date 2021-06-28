@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.util.parseSpaceSeparatedArgs
 
 plugins {
     application
-    id("org.springframework.boot") version "2.3.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
-    id("com.google.cloud.tools.jib") version "2.4.0"
+    id("org.springframework.boot") version "2.5.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    kotlin("jvm") version "1.5.20"
+    kotlin("plugin.spring") version "1.5.20"
+    id("com.google.cloud.tools.jib") version "3.1.1"
 }
 
 springBoot {
@@ -27,7 +27,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "Hoxton.SR5"
+extra["springCloudVersion"] = "2020.0.3"
 
 configurations.all {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -39,7 +39,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-gateway")
     implementation("org.springframework.cloud:spring-cloud-config-client")
     implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
-    implementation("io.github.resilience4j:resilience4j-spring-boot2:1.5.0")
+    implementation("io.github.resilience4j:resilience4j-spring-boot2:1.7.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("ch.qos.logback.contrib:logback-json-classic:0.1.5")
     implementation("ch.qos.logback.contrib:logback-jackson:0.1.5")
@@ -84,7 +84,9 @@ jib {
     container {
         jvmFlags = parseSpaceSeparatedArgs("-noverify -Xmx${JVMProps.XMX} -Xms${JVMProps.XMS} -XX:MaxMetaspaceSize=${JVMProps.MAX_METASPACE_SIZE} -XX:MaxDirectMemorySize=${JVMProps.MAX_DIRECT_MEMORY_SIZE} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JVMProps.HEAPDUMP_PATH} -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} -Dspring.profiles.active=prod")
         ports = listOf(DockerProps.APP_PORT, DockerProps.DEBUG_PORT, DockerProps.JMX_PORT)
-        labels = mapOf("app-name" to application.applicationName, "service-version" to version.toString())
+        labels.set(mapOf("maintainer" to "Vadzim Kavalkou <vadzim.kavalkou@gmail.com>",
+                "app-name" to application.applicationName,
+                "service-version" to version.toString()))
     }
 }
 
