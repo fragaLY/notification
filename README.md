@@ -28,4 +28,5 @@
 * OPENAPI 3;
 * Debezium for Outbox + Delay Queue;
 * Spring Cache + Ehcache;
+* SemVer;
 * Minicube migration.
