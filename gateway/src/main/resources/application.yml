@@ -2,6 +2,8 @@ server:
   port: 8082
 
 spring:
+  thymeleaf:
+    enabled: false
   cloud:
     gateway:
       globalcors:

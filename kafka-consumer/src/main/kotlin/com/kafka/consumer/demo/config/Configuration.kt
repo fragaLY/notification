@@ -59,7 +59,7 @@ class KafkaErrorHandlingLogger : ErrorHandler {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun handle(exception: Exception, data: ConsumerRecord<*, *>) {
-        logger.error("[CONSUMER] Error during processing the topic [${data.topic()}] message[key = [${data.key()}], value = [${data.value()}]] from partition [${data.partition()}] with offset [${data.offset()}]: $exception")
+    override fun handle(exception: java.lang.Exception, data: ConsumerRecord<*, *>?) {
+        logger.error("[CONSUMER] Error during processing the topic [${data?.topic()}] message[key = [${data?.key()}], value = [${data?.value()}]] from partition [${data?.partition()}] with offset [${data?.offset()}]: $exception")
     }
 }

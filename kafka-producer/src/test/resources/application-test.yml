@@ -12,29 +12,7 @@ spring:
   jackson:
     time-zone: UTC
     locale: en_US
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        default_schema: "notification"
-    show-sql: true
-  datasource:
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: "jdbc:tc:postgresql://localhost/notification"
-    username:
-    password:
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
-    schemas: "notification"
   kafka:
-    consumer:
-      bootstrap-servers: ${spring.embedded.kafka.brokers}
-      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: notification-events-listener-group
     producer:
       bootstrap-servers: ${spring.embedded.kafka.brokers}
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
@@ -44,14 +22,14 @@ spring:
 
 # server specific properties
 server:
-  port: 8084
+  port: 8083
   shutdown: immediate
   servlet:
     session:
       timeout: 60m
       cookie:
         http-only: true
-    application-display-name: kafka-consumer
+    application-display-name: kafka-producer
   compression:
     enabled: true
     min-response-size: 2KB # default value
