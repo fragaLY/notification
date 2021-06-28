@@ -18,6 +18,7 @@
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
+* Kafka EOS;
 * Resilience4j;
 * Prometheus;
 * Grafana;
