@@ -2,6 +2,8 @@ server:
   port: 8088
 
 spring:
+  thymeleaf:
+    enabled: false
   cloud:
     config:
       server:
