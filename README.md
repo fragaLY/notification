@@ -30,7 +30,8 @@
 * Redis;  
 * OPENAPI 3;
 * Debezium for Outbox + Delay Queue;
-* TSL support;  
+* TSL support;
+* Vault;  
 * KeyCloak;
 * SemVer;
 * Kubernetes migration.

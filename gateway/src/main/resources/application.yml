@@ -45,3 +45,10 @@ logging:
     org.springframework: info
     org.springframework.cloud: info
     com.api.gateway.demo: info
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: 'configserver:http://config-server-prod:8088'
