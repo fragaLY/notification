@@ -19,6 +19,17 @@ jobs:
           java-version: ${{ secrets.JAVA_VERSION }}
           distribution: 'adopt'
           architecture: x64
+      - name: Scan current project
+        id: scan
+        uses: anchore/scan-action@v2
+        with:
+          path: "./"
+          fail-build: true
+          acs-report-enable: true
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: PRODUCER COMPILATION
@@ -30,18 +41,18 @@ jobs:
       - name: PRODUCER DOCKER BUILD IMAGE
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jibDockerBuild --image=producer:latest
-      - uses: anchore/scan-action@v2
-        with:
-          image: "producer:latest"
-          fail-build: true
-          acs-report-enable: true
-          severity-cutoff: critical
-      - name: UPLOAD ANCHORE SCAN SARIF REPORT
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-      - name: INSPECT ACTION SARIF REPORT
-        run: cat ${{ steps.scan.outputs.sarif }}
+#      - uses: anchore/scan-action@v2
+#        with:
+#          image: "producer:latest"
+#          fail-build: true
+#          acs-report-enable: true
+#          severity-cutoff: critical
+#      - name: UPLOAD ANCHORE SCAN SARIF REPORT
+#        uses: github/codeql-action/upload-sarif@v1
+#        with:
+#          sarif_file: ${{ steps.scan.outputs.sarif }}
+#      - name: INSPECT ACTION SARIF REPORT
+#        run: cat ${{ steps.scan.outputs.sarif }}
       - name: PRODUCER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/producer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
