@@ -7,6 +7,10 @@ spring:
       topic: zipkin
     sender:
       type: KAFKA
+  kafka:
+    bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
+    listener:
+      missing-topics-fatal: false
   thymeleaf:
     enabled: false
   cloud:

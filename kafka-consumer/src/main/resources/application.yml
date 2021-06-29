@@ -40,8 +40,8 @@ spring:
     sender:
       type: KAFKA
   kafka:
+    bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
     consumer:
-      bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: notification-events-listener-group
