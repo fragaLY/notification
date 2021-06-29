@@ -11,5 +11,5 @@ import org.springframework.test.context.TestPropertySource
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = ["spring.kafka.auto-startup:true"]
 )
-@EmbeddedKafka(topics = ["notification-event"], partitions = 1, controlledShutdown = true)
+@EmbeddedKafka(topics = ["notification-event"], count = 3, partitions = 2, controlledShutdown = true)
 abstract class IntegrationTest

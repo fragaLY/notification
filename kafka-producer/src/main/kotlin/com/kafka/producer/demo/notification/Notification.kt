@@ -10,6 +10,7 @@ import org.springframework.kafka.support.SendResult
 import org.springframework.lang.Nullable
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.concurrent.ListenableFutureCallback
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -73,6 +74,7 @@ class EventProducer(private val template: KafkaTemplate<Long, String>, private v
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Transactional
     fun produce(event: NotificationEvent) {
         val result = template.sendDefault(event.key, mapper.writeValueAsString(event))
         result.addCallback(object : ListenableFutureCallback<SendResult<Long, String>> {
