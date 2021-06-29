@@ -7,14 +7,12 @@ import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class Consumer(private val mapper: ObjectMapper, private val notificationService: NotificationService) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @Transactional
     @KafkaListener(groupId = "\${spring.kafka.consumer.group-id}", topics = ["notification-event"])
     fun onMessage(@Payload payload: String, meta: ConsumerRecordMetadata, acknowledgment: Acknowledgment) {
         val event = mapper.readValue(payload, NotificationEvent::class.java)

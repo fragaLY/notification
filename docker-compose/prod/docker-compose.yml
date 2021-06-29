@@ -138,3 +138,17 @@ services:
     restart: on-failure
     ports:
       - 80:80
+
+  elasticsearch:
+    image: openzipkin/zipkin-elasticsearch7:2.22.2
+    container_name: elasticsearch
+
+  zipkin:
+    image: openzipkin/zipkin:2.23.2
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=elasticsearch:9200
+      - KAFKA_BOOTSTRAP_SERVERS=kafka-prod-1:29092
+    depends_on:
+      - elasticsearch

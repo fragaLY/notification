@@ -2,6 +2,11 @@ server:
   port: 8082
 
 spring:
+  zipkin:
+    kafka:
+      topic: zipkin
+    sender:
+      type: KAFKA
   thymeleaf:
     enabled: false
   cloud:
