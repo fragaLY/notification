@@ -23,7 +23,7 @@ jobs:
         id: scan
         uses: anchore/scan-action@v2
         with:
-          path: "./"
+          path: "./kafka-producer"
           fail-build: true
           acs-report-enable: true
       - name: upload Anchore scan SARIF report
