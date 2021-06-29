@@ -15,19 +15,24 @@ spring:
     timeout-per-shutdown-phase: 60s
   kafka:
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      acks: all # default value 1, To turn off set 0.
-      retries: 10 # positive integer is possible. Max 2147483647.
-    admin:
+      acks: all
+      retries: 5
+      transaction-id-prefix: kafka-producer
       properties:
-        bootstrap-servers: localhost:9092
-        linger:
-          ms: 1
-        retries: 5
+        enable.idempotence: true
+        compression.type: none
+        max.in.flight.requests.per.connection: 1
+        auto.create.topics.enable: false
     template:
       default-topic: notification-event
+    properties:
+      min.insync.replicas: 2
+    listener:
+      ack-mode: manual
+      missing-topics-fatal: false
 
 # server specific properties
 server:

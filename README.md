@@ -8,28 +8,29 @@
 ### TECH STACK:
 * Kotlin, VueJS;
 * Spring Boot, Spring Gateway, Spring Config Server;
-* Kafka, Schema registry;
-* Postgres, Flyway, Test conta  iners;
+* Kafka EOS, Schema registry;
+* Postgres, Flyway, Test containers;
 * Gradle Kts, Jib, Docker compose;
-* Jetty, Undertow, Netty, Nginx; 
+* Jetty, Undertow, Netty, Nginx;
 * Logback;
 * Github CI;
 * Grype;
 * [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
 
 ##### IN PROGRESS:
-* Ktlint Scan;
-* Kafka EOS;
-* Resilience4j;
+* Zipkin;
 * Prometheus;
 * Grafana;
+* Ktlint
+* Resilience4j;
 * Kibana;
-* Zipkin
-* KeyCloak;
 * Spring Admin Management Client;
 * Avro;
+* Spring Cache + Ehcache;
+* Redis;  
 * OPENAPI 3;
 * Debezium for Outbox + Delay Queue;
-* Spring Cache + Ehcache;
+* TSL support;  
+* KeyCloak;
 * SemVer;
 * Kubernetes migration.

@@ -6,7 +6,7 @@ services:
     restart: on-failure
 
   postgres-prod:
-    image: postgres:12.3
+    image: postgres:13.3-alpine
     restart: on-failure
     environment:
       - POSTGRES_USER=user
@@ -14,40 +14,99 @@ services:
       - POSTGRES_DB=notification-dev
 
   zookeeper-prod:
-    image: confluentinc/cp-zookeeper:5.0.4
+    image: confluentinc/cp-zookeeper:6.2.0
+    healthcheck:
+      test: echo stat | nc localhost 2181
+      interval: 2s
+      timeout: 2s
+      retries: 15
     ports:
       - 2181:2181
     environment:
+      ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  kafka-prod:
-    image: confluentinc/cp-kafka:5.0.4
+  kafka-prod-1:
+    image: confluentinc/cp-kafka:6.2.0
+    healthcheck:
+      test: ps augwwx | egrep [S]upportedKafka
     depends_on:
       - zookeeper-prod
     environment:
+      KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-prod:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LISTENERS: INTERNAL://kafka-prod-1:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-1:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+
+  kafka-prod-2:
+    image: confluentinc/cp-kafka:6.2.0
+    healthcheck:
+      test: ps augwwx | egrep [S]upportedKafka
+    depends_on:
+      - zookeeper-prod
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-prod-2:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-2:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+
+  kafka-prod-3:
+    image: confluentinc/cp-kafka:6.2.0
+    healthcheck:
+      test: ps augwwx | egrep [S]upportedKafka
+    depends_on:
+      - zookeeper-prod
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-prod-3:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-3:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
   schema-registry-prod:
-    image: confluentinc/cp-schema-registry:5.0.4
+    image: confluentinc/cp-schema-registry:6.2.0
     restart: always
     depends_on:
-      - kafka-prod
+      - kafka-prod-1
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper-prod:2181
       SCHEMA_REGISTRY_HOST_NAME: schema-registry-prod
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry-prod:8081
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka-prod-1:29092'
+
+  kafka-setup:
+    image: confluentinc/cp-kafka:6.2.0
+    depends_on:
+      - kafka-prod-1
+      - kafka-prod-2
+      - kafka-prod-3
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+           cub kafka-ready -b kafka-prod-1:29092 1 20 && \
+           kafka-topics --create --if-not-exists --zookeeper zookeeper-prod:2181 --partitions 3 --replication-factor 2 --topic notification-event'"
+    environment:
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
 
   kafka-ui-prod:
-    image: obsidiandynamics/kafdrop
+    image: obsidiandynamics/kafdrop:3.27.0
     restart: on-failure
     depends_on:
-      - schema-registry-prod
+      - kafka-prod-1
+      - kafka-prod-2
+      - kafka-prod-3
     environment:
-      KAFKA_BROKERCONNECT: kafka-prod:9092
+      KAFKA_BROKERCONNECT: http://kafka-prod-1:29092, http://kafka-prod-2:29092, http://kafka-prod-3:29092
       SERVER_SERVLET_CONTEXTPATH: /
       SCHEMAREGISTRY_CONNECT: http://schema-registry-prod:8081
       JVM_OPTS: "-Xms32M -Xmx64M"

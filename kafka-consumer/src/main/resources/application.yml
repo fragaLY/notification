@@ -33,10 +33,14 @@ spring:
     schemas: "notification"
   kafka:
     consumer:
-      bootstrap-servers: http://localhost:9092
+      bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: notification-events-listener-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      properties:
+        isolation.level: read_committed
     template:
       default-topic: notification-event
     listener:
