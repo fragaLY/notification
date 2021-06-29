@@ -1,5 +1,8 @@
 # spring specific properties
 spring:
+  cloud:
+    config:
+      enabled: false
   main:
     lazy-initialization: false
     web-application-type: servlet

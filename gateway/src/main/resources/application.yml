@@ -10,6 +10,8 @@ spring:
   thymeleaf:
     enabled: false
   cloud:
+    config:
+      enabled: false
     gateway:
       globalcors:
         cors-configurations:
