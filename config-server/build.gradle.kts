@@ -15,7 +15,7 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 application {
-    mainClassName = "by.vk.configserver.ConfigServerApplicationKt"
+    mainClass.set("by.vk.configserver.ConfigServerApplicationKt")
     applicationName = "config-server"
 }
 
@@ -81,6 +81,7 @@ jib {
 		environment = mapOf(
 				"USERNAME" to "super_secret_user",
 				"PASSWORD" to "super_secret_password")
+        creationTime = "USE_CURRENT_TIMESTAMP"
         jvmFlags = parseSpaceSeparatedArgs("-noverify -Xmx${JVMProps.XMX} -Xms${JVMProps.XMS} -XX:MaxMetaspaceSize=${JVMProps.MAX_METASPACE_SIZE} -XX:MaxDirectMemorySize=${JVMProps.MAX_DIRECT_MEMORY_SIZE} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JVMProps.HEAPDUMP_PATH} -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${DockerProps.JMX_PORT} -Dcom.sun.management.jmxremote.rmi.port=${DockerProps.JMX_PORT} -Dspring.profiles.active=prod")
         ports = listOf(DockerProps.APP_PORT, DockerProps.DEBUG_PORT, DockerProps.JMX_PORT)
         labels.set(mapOf("maintainer" to "Vadzim Kavalkou <vadzim.kavalkou@gmail.com>",

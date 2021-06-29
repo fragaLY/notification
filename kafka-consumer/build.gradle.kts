@@ -21,7 +21,7 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 application {
-    mainClassName = "com.kafka.consumer.demo.NotificationConsumerKt"
+    mainClass.set("com.kafka.consumer.demo.NotificationConsumerKt")
     applicationName = "kafka-consumer"
 }
 
@@ -105,5 +105,6 @@ jib {
         labels.set(mapOf("maintainer" to "Vadzim Kavalkou <vadzim.kavalkou@gmail.com>",
                 "app-name" to application.applicationName,
                 "service-version" to version.toString()))
+        creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }

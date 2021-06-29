@@ -19,7 +19,7 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 application {
-    mainClassName = "com.api.gateway.demo.DemoApplicationKt"
+    mainClass.set("com.api.gateway.demo.DemoApplicationKt")
     applicationName = "kafka-producer"
 }
 
@@ -87,6 +87,7 @@ jib {
         labels.set(mapOf("maintainer" to "Vadzim Kavalkou <vadzim.kavalkou@gmail.com>",
                 "app-name" to application.applicationName,
                 "service-version" to version.toString()))
+        creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }
 

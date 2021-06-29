@@ -38,21 +38,6 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: PRODUCER BUILD
         run: ./gradlew build -x test -x compileJava --parallel
-      - name: PRODUCER DOCKER BUILD IMAGE
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jibDockerBuild --image=producer:latest
-#      - uses: anchore/scan-action@v2
-#        with:
-#          image: "producer:latest"
-#          fail-build: true
-#          acs-report-enable: true
-#          severity-cutoff: critical
-#      - name: UPLOAD ANCHORE SCAN SARIF REPORT
-#        uses: github/codeql-action/upload-sarif@v1
-#        with:
-#          sarif_file: ${{ steps.scan.outputs.sarif }}
-#      - name: INSPECT ACTION SARIF REPORT
-#        run: cat ${{ steps.scan.outputs.sarif }}
       - name: PRODUCER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/producer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -69,6 +54,17 @@ jobs:
           java-version: ${{ secrets.JAVA_VERSION }}
           distribution: 'adopt'
           architecture: x64
+      - name: Scan current project
+        id: scan
+        uses: anchore/scan-action@v2
+        with:
+          path: "./kafka-consumer"
+          fail-build: true
+          acs-report-enable: true
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: CONSUMER COMPILATION
@@ -77,21 +73,6 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: CONSUMER BUILD
         run: ./gradlew build -x test -x compileJava --parallel
-      - name: CONSUMER DOCKER BUILD IMAGE
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jibDockerBuild --image=consumer:latest
-      - uses: anchore/scan-action@v2
-        with:
-          image: "consumer:latest"
-          fail-build: true
-          acs-report-enable: true
-          severity-cutoff: critical
-      - name: UPLOAD ANCHORE SCAN SARIF REPORT
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-      - name: INSPECT ACTION SARIF REPORT
-        run: cat ${{ steps.scan.outputs.sarif }}
       - name: CONSUMER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/consumer:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -108,6 +89,17 @@ jobs:
           java-version: ${{ secrets.JAVA_VERSION }}
           distribution: 'adopt'
           architecture: x64
+      - name: Scan current project
+        id: scan
+        uses: anchore/scan-action@v2
+        with:
+          path: "./gateway"
+          fail-build: true
+          acs-report-enable: true
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
       - name: GATEWAY COMPILATION
@@ -116,21 +108,6 @@ jobs:
         run: ./gradlew test -x compileTestJava --parallel
       - name: GATEWAY BUILD
         run: ./gradlew build -x test -x compileJava --parallel
-      - name: GATEWAY DOCKER BUILD IMAGE
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jibDockerBuild --image=gateway:latest
-      - uses: anchore/scan-action@v2
-        with:
-          image: "gateway:latest"
-          fail-build: true
-          acs-report-enable: true
-          severity-cutoff: critical
-      - name: UPLOAD ANCHORE SCAN SARIF REPORT
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-      - name: INSPECT ACTION SARIF REPORT
-        run: cat ${{ steps.scan.outputs.sarif }}
       - name: GATEWAY DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         run: ./gradlew jib -Djib.to.image=${{ secrets.DOCKER_HUB_REGISTRY }}/${{ secrets.DOCKER_HUB_USER }}/gateway:latest -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USER }} -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -147,6 +124,17 @@ jobs:
           java-version: ${{ secrets.JAVA_VERSION }}
           distribution: 'adopt'
           architecture: x64
+      - name: Scan current project
+        id: scan
+        uses: anchore/scan-action@v2
+        with:
+          path: "./config-server"
+          fail-build: true
+          acs-report-enable: true
+      - name: upload Anchore scan SARIF report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
       - run: echo $GIT_CONFIG_URL
       - name: GRADLE PREPARATION
         run: chmod +x gradlew
@@ -162,21 +150,6 @@ jobs:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           GIT_CONFIG_URL: ${{ secrets.GIT_CONFIG_URL }}
         run: ./gradlew build -x test -x compileJava --parallel
-      - name: CONFIG SERVER DOCKER BUILD IMAGE
-        if: github.ref == 'refs/heads/master'
-        run: ./gradlew jibDockerBuild --image=config-server:latest
-      - uses: anchore/scan-action@v2
-        with:
-          image: "config-server:latest"
-          fail-build: true
-          acs-report-enable: true
-          severity-cutoff: critical
-      - name: UPLOAD ANCHORE SCAN SARIF REPORT
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-      - name: INSPECT ACTION SARIF REPORT
-        run: cat ${{ steps.scan.outputs.sarif }}
       - name: CONFIG SERVER DOCKER DELIVERY
         if: github.ref == 'refs/heads/master'
         env:
