@@ -92,8 +92,9 @@ services:
       - kafka-2
       - kafka-3
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
-           cub kafka-ready -b kafka-1:29092 1 20 && \
-           kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 3 --replication-factor 2 --topic notification-event'"
+               cub kafka-ready -b kafka-prod-1:29092 1 20 && \
+               kafka-topics --create --if-not-exists --zookeeper zookeeper-prod:2181 --partitions 3 --replication-factor 2 --topic notification-event && \
+               kafka-topics --create --if-not-exists --zookeeper zookeeper-prod:2181 --partitions 3 --replication-factor 2 --topic zipkin'"
     environment:
       KAFKA_BROKER_ID: ignored
       KAFKA_ZOOKEEPER_CONNECT: ignored
