@@ -152,6 +152,6 @@ services:
     environment:
       - STORAGE_TYPE=elasticsearch
       - ES_HOSTS=elasticsearch:9200
-      - KAFKA_BOOTSTRAP_SERVERS=kafka-prod-1:29092
+      - KAFKA_BOOTSTRAP_SERVERS=http://kafka-prod-1:29092, http://kafka-prod-2:29092, http://kafka-prod-3:29092
     depends_on:
       - elasticsearch
