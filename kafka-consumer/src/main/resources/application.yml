@@ -1,8 +1,11 @@
-# spring specific properties
 spring:
   cloud:
     config:
       enabled: false
+  thymeleaf:
+    enabled: false
+  application:
+    name: consumer-service
   main:
     lazy-initialization: false
     web-application-type: servlet
@@ -54,7 +57,6 @@ spring:
     listener:
       ack-mode: manual
 
-# server specific properties
 server:
   port: 8084
   shutdown: graceful
@@ -66,13 +68,11 @@ server:
     application-display-name: kafka-consumer
   compression:
     enabled: true
-    min-response-size: 2KB # default value
     mime-types: "text/html, text/xml, text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, image/jpeg, image/png, application/octet-stream"
   error:
     whitelabel:
       enabled: false
 
-# log specific properties
 logging:
   level:
     root: info
@@ -80,13 +80,19 @@ logging:
       springframework:
         boot: info
         kafka: info
-
 ---
 spring:
+  application:
+    name: consumer-service
   config:
     activate:
       on-profile: prod
-  cloud:
-    config:
-      uri: http://config-server-prod:8088
-      fail-fast: true
+    import: "configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100"
+
+logging:
+  level:
+    org.springframework: error
+    org.springframework.cloud: error
+    com.kafka.consumer.demo: error
+    org.apache.kafka: error
+    org.hibernate.validator: error

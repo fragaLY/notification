@@ -21,13 +21,12 @@
 * Zipkin;
 * Prometheus;
 * Grafana;
-* Ktlint
+* Ktlint;
 * Resilience4j;
 * Kibana;
 * Spring Admin Management Client;
 * Avro;
-* Spring Cache + Ehcache;
-* Redis;  
+* Spring Cache + Redis;
 * OPENAPI 3;
 * Debezium for Outbox + Delay Queue;
 * TSL support;

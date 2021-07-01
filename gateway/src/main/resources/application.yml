@@ -63,4 +63,12 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: configserver:http://localhost:8088/
+    import: "configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100"
+
+logging:
+  level:
+    org.springframework: error
+    org.springframework.cloud: error
+    com.api.gateway.demo: error
+    org.apache.kafka: error
+    org.hibernate.validator: error
