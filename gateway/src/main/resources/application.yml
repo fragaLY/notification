@@ -4,67 +4,7 @@ server:
 spring:
   application:
     name: gateway-service
-  main:
-    banner-mode: off
-  zipkin:
-    kafka:
-      topic: zipkin
-    sender:
-      type: KAFKA
-  kafka:
-    bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
-    listener:
-      missing-topics-fatal: false
-  thymeleaf:
-    enabled: false
-  cloud:
-    config:
-      enabled: false
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost"
-            allowedMethods:
-              - POST
-              - PUT
-              - OPTIONS
-      routes:
-        - id: notification-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/notifications/**
-            - Header=X-CSRF-TOKEN, [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}
-            - Host=**localhost**
-          filters:
-            - name: NotificationPreFilter
-            - name: NotificationPostFilter
-
-resilience4j.timelimiter:
-  configs:
-    default:
-      timeoutDuration: 1s
-      cancelRunningFuture: false
-  instances:
-    notification-service:
-      timeoutDuration: 250ms
-
-logging:
-  level:
-    org.springframework: info
-    org.springframework.cloud: info
-    com.api.gateway.demo: info
-
----
-spring:
-  main:
-    banner-mode: off
-  cloud:
-    config:
-      enabled: true
   config:
-    name: gateway-service
     activate:
-      on-profile: prod
-    import: configserver:http://config-server:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
+      on-profile: default
+    import: configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100

@@ -2,9 +2,6 @@ server:
   port: 8088
 
 spring:
-  config:
-    activate:
-      on-profile: prod, default
   application:
     name: config-service
   main:

@@ -6,6 +6,8 @@ services:
     restart: on-failure
     container_name: config-server-prod
     hostname: config-server
+    ports:
+      - 8088:8088
 
   postgres:
     image: postgres:13.3-alpine
