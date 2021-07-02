@@ -1,20 +1,26 @@
 version: '3.7'
 services:
 
-  config-server-prod:
+  config-server:
     image: fragaly/config-server
     restart: on-failure
+    container_name: config-server-prod
+    hostname: config-server
 
-  postgres-prod:
+  postgres:
     image: postgres:13.3-alpine
+    container_name: postgres-prod
+    hostname: postgres
     restart: on-failure
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=P@55w0rd
       - POSTGRES_DB=notification-dev
 
-  zookeeper-prod:
+  zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper-prod
+    hostname: zookeeper
     healthcheck:
       test: echo stat | nc localhost 2181
       interval: 2s
@@ -27,131 +33,152 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  kafka-prod-1:
+  kafka-1:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-1-prod
+    hostname: kafka-1
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
-      - zookeeper-prod
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka-prod-1:29092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-1:29092
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-1:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
-  kafka-prod-2:
+  kafka-2:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-2-prod
+    hostname: kafka-2
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
-      - zookeeper-prod
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka-prod-2:29092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-2:29092
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-2:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
-  kafka-prod-3:
+  kafka-3:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-3-prod
+    hostname: kafka-3
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
-      - zookeeper-prod
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-prod:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka-prod-3:29092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-prod-3:29092
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-3:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
-  schema-registry-prod:
+  schema-registry:
     image: confluentinc/cp-schema-registry:6.2.0
+    container_name: schema-registry-prod
+    hostname: schema-registry
     restart: always
     depends_on:
-      - kafka-prod-1
+      - kafka-1
     environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry-prod
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka-prod-1:29092'
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka-1:29092'
 
   kafka-setup:
     image: confluentinc/cp-kafka:6.2.0
     depends_on:
-      - kafka-prod-1
-      - kafka-prod-2
-      - kafka-prod-3
+      - kafka-1
+      - kafka-2
+      - kafka-3
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
-           cub kafka-ready -b kafka-prod-1:29092 1 20 && \
-           kafka-topics --create --if-not-exists --zookeeper zookeeper-prod:2181 --partitions 3 --replication-factor 2 --topic notification-event && \
-           kafka-topics --create --if-not-exists --zookeeper zookeeper-prod:2181 --partitions 3 --replication-factor 2 --topic zipkin'"
+           cub kafka-ready -b kafka-1:29092 1 20 && \
+           cub kafka-ready -b kafka-2:29092 1 20 && \
+           cub kafka-ready -b kafka-3:29092 1 20 && \
+           kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 3 --replication-factor 2 --topic notification-event && \
+           kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 3 --replication-factor 2 --topic zipkin'"
     environment:
       KAFKA_BROKER_ID: ignored
       KAFKA_ZOOKEEPER_CONNECT: ignored
 
-  kafka-ui-prod:
+  kafka-ui:
     image: obsidiandynamics/kafdrop:3.27.0
     restart: on-failure
+    container_name: kafka-ui-prod
+    hostname: kafka-ui
     depends_on:
-      - kafka-prod-1
-      - kafka-prod-2
-      - kafka-prod-3
+      - schema-registry
+      - kafka-setup
     environment:
-      KAFKA_BROKERCONNECT: http://kafka-prod-1:29092, http://kafka-prod-2:29092, http://kafka-prod-3:29092
+      KAFKA_BROKERCONNECT: kafka-1:29092, kafka-2:29092, kafka-3:29092
       SERVER_SERVLET_CONTEXTPATH: /
-      SCHEMAREGISTRY_CONNECT: http://schema-registry-prod:8081
+      SCHEMAREGISTRY_CONNECT: http://schema-registry:8081
       JVM_OPTS: "-Xms32M -Xmx64M"
     ports:
       - 9000:9000
 
-  gateway-prod:
+  gateway:
     image: fragaly/gateway
+    container_name: gateway-prod
+    hostname: gateway
     restart: on-failure
     depends_on:
-      - config-server-prod
+      - config-server
 
-  producer-prod:
+  producer:
     image: fragaly/producer
+    container_name: producer-prod
+    hostname: producer
     restart: on-failure
     depends_on:
-      - schema-registry-prod
-      - gateway-prod
+      - kafka-setup
+      - gateway
 
-  consumer-prod:
+  consumer:
     image: fragaly/consumer
+    container_name: consumer-prod
+    hostname: consumer
     restart: on-failure
     depends_on:
-      - schema-registry-prod
-      - gateway-prod
+      - kafka-setup
+      - gateway
 
-  web-prod:
+  web:
     image: fragaly/web
+    container_name: web
+    hostname: web
     restart: on-failure
     ports:
       - 80:80
 
   elasticsearch:
     image: openzipkin/zipkin-elasticsearch7:2.22.2
-    container_name: elasticsearch
+    container_name: elasticsearch-prod
+    hostname: elasticsearch
 
   zipkin:
     image: openzipkin/zipkin:2.23.2
-    container_name: zipkin
+    container_name: zipkin-prod
+    hostname: zipkin
     ports:
       - 9411:9411
     environment:
       - STORAGE_TYPE=elasticsearch
       - ES_HOSTS=elasticsearch:9200
-      - KAFKA_BOOTSTRAP_SERVERS=http://kafka-prod-1:29092, http://kafka-prod-2:29092, http://kafka-prod-3:29092
+      - KAFKA_BOOTSTRAP_SERVERS=http://kafka-1:29092, http://kafka-2:29092, http://kafka-3:29092
     depends_on:
       - elasticsearch

@@ -15,6 +15,8 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper-local
+    hostname: zookeeper
     healthcheck:
       test: echo stat | nc localhost 2181
       interval: 2s
@@ -29,6 +31,8 @@ services:
 
   kafka-1:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-1-local
+    hostname: kafka-1
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
@@ -45,6 +49,8 @@ services:
 
   kafka-2:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-2-local
+    hostname: kafka-2
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
@@ -61,6 +67,8 @@ services:
 
   kafka-3:
     image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka-3-local
+    hostname: kafka-3
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
     depends_on:
@@ -77,6 +85,8 @@ services:
 
   schema-registry:
     image: confluentinc/cp-schema-registry:6.2.0
+    container_name: schema-registry-local
+    hostname: schema-registry
     restart: always
     depends_on:
       - kafka-1
@@ -93,6 +103,8 @@ services:
       - kafka-3
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
                cub kafka-ready -b kafka-1:29092 1 20 && \
+               cub kafka-ready -b kafka-2:29092 1 20 && \
+               cub kafka-ready -b kafka-3:29092 1 20 && \
                kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 3 --replication-factor 2 --topic notification-event && \
                kafka-topics --create --if-not-exists --zookeeper zookeeper:2181 --partitions 3 --replication-factor 2 --topic zipkin'"
     environment:
@@ -102,8 +114,11 @@ services:
   kafka-ui:
     image: obsidiandynamics/kafdrop:3.27.0
     restart: on-failure
+    container_name: kafka-ui-local
+    hostname: kafka-ui
     depends_on:
       - schema-registry
+      - kafka-setup
     environment:
       KAFKA_BROKERCONNECT: kafka-1:29092, kafka-2:29092, kafka-3:29092
       SERVER_SERVLET_CONTEXTPATH: /
