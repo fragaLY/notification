@@ -35,6 +35,8 @@ services:
     hostname: kafka-1
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
+    ports:
+      - 9092:9092
     depends_on:
       - zookeeper
     environment:
@@ -53,12 +55,14 @@ services:
     hostname: kafka-2
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
+    ports:
+      - 9093:9092
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka-2:29092, EXTERNAL://kafka-2:9093
+      KAFKA_LISTENERS: INTERNAL://kafka-2:29092, EXTERNAL://localhost:9093
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29092, EXTERNAL://localhost:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
@@ -71,12 +75,14 @@ services:
     hostname: kafka-3
     healthcheck:
       test: ps augwwx | egrep [S]upportedKafka
+    ports:
+      - 9094:9092
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka-3:29092, EXTERNAL://kafka-3:9094
+      KAFKA_LISTENERS: INTERNAL://kafka-3:29092, EXTERNAL://localhost:9094
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29092, EXTERNAL://localhost:9094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
@@ -89,7 +95,7 @@ services:
     hostname: schema-registry
     restart: always
     depends_on:
-      - kafka-setup
+      - zookeeper
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'kafka-1:29092'
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
@@ -101,6 +107,7 @@ services:
       - kafka-1
       - kafka-2
       - kafka-3
+      - schema-registry
     command: "bash -c 'echo Waiting for Kafka to be ready... && \
                cub kafka-ready -b kafka-1:29092 1 20 && \
                cub kafka-ready -b kafka-2:29092 1 20 && \
@@ -117,7 +124,7 @@ services:
     container_name: kafka-ui-local
     hostname: kafka-ui
     depends_on:
-      - schema-registry
+      - kafka-setup
     environment:
       KAFKA_BROKERCONNECT: kafka-1:29092, kafka-2:29092, kafka-3:29092
       SERVER_SERVLET_CONTEXTPATH: /
@@ -125,3 +132,24 @@ services:
       JVM_OPTS: "-Xms32M -Xmx64M"
     ports:
       - 9000:9000
+
+  elasticsearch:
+    image: openzipkin/zipkin-elasticsearch7:2.22.2
+    container_name: elasticsearch-local
+    hostname: elasticsearch
+
+  zipkin:
+    image: openzipkin/zipkin:2.23.2
+    container_name: zipkin-local
+    hostname: zipkin
+    depends_on:
+      - elasticsearch
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    ports:
+      - 9411:9411
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=elasticsearch:9200
+      - KAFKA_BOOTSTRAP_SERVERS=http://kafka-1:29092, http://kafka-2:29092, http://kafka-3:29092

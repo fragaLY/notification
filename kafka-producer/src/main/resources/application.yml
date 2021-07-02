@@ -1,82 +1,13 @@
 spring:
   application:
     name: producer-service
-  cloud:
-    config:
-      enabled: false
-  main:
-    lazy-initialization: false
-    web-application-type: servlet
-    banner-mode: off
-  jackson:
-    time-zone: UTC
-    locale: en_US
-  mvc:
-    format:
-      date: iso
-      date-time: iso
-  lifecycle:
-    timeout-per-shutdown-phase: 60s
-  zipkin:
-    kafka:
-      topic: zipkin
-    sender:
-      type: KAFKA
-  kafka:
-    producer:
-      bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
-      key-serializer: org.apache.kafka.common.serialization.LongSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      acks: all
-      retries: 5
-      transaction-id-prefix: kafka-producer
-      properties:
-        enable.idempotence: true
-        compression.type: none
-        max.in.flight.requests.per.connection: 1
-        auto.create.topics.enable: false
-    template:
-      default-topic: notification-event
-    properties:
-      min.insync.replicas: 2
-    listener:
-      ack-mode: manual
-      missing-topics-fatal: false
+  config:
+    activate:
+      on-profile: default
+    import: configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
 
 server:
   port: 8083
-  shutdown: graceful
-  servlet:
-    session:
-      timeout: 60m
-      cookie:
-        http-only: true
-    application-display-name: kafka-producer
-  compression:
-    enabled: true
-    mime-types: "text/html, text/xml, text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, image/jpeg, image/png, application/octet-stream"
   error:
     whitelabel:
       enabled: false
-
-logging:
-  level:
-    root: info
-    org:
-      springframework:
-        boot: info
-        kafka: info
-
----
-spring:
-  application:
-    name: producer-service
-  main:
-    banner-mode: off
-  cloud:
-    config:
-      enabled: true
-  config:
-    activate:
-      on-profile: prod
-    import: configserver:http://config-server:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
