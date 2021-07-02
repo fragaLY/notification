@@ -66,4 +66,4 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
+    import: configserver:http://config-server-prod:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100

@@ -22,17 +22,3 @@ logging:
     org.springframework: info
     org.springframework.cloud: info
     by.vk.configserver: info
-
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-
-logging:
-  level:
-    org.springframework: error
-    org.springframework.cloud: error
-    by.vk.configserver: error
-    org.eclipse.jetty: error
-    org.hibernate: error
