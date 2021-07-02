@@ -89,7 +89,7 @@ services:
     hostname: schema-registry
     restart: always
     depends_on:
-      - kafka-1
+      - kafka-setup
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'kafka-1:29092'
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
@@ -118,7 +118,6 @@ services:
     hostname: kafka-ui
     depends_on:
       - schema-registry
-      - kafka-setup
     environment:
       KAFKA_BROKERCONNECT: kafka-1:29092, kafka-2:29092, kafka-3:29092
       SERVER_SERVLET_CONTEXTPATH: /
