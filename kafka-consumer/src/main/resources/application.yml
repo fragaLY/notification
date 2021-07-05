@@ -1,95 +1,10 @@
 spring:
-  cloud:
-    config:
-      enabled: false
-  thymeleaf:
-    enabled: false
   application:
     name: consumer-service
-  main:
-    lazy-initialization: false
-    web-application-type: servlet
-    banner-mode: off
-  lifecycle:
-    timeout-per-shutdown-phase: 60s
-  jackson:
-    time-zone: UTC
-    locale: en_US
-  datasource:
-    driverClassName: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/notification-dev"
-    username: "user"
-    password: "P@55w0rd"
-    hikari:
-      minimumIdle: 1
-      maximumPoolSize: 3
-      autoCommit: false
-      connectionTestQuery: SELECT 1
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    properties:
-      hibernate:
-        default_schema: "notification"
-  flyway:
-    enabled: true
-    locations: "classpath:db/migration"
-    url: "jdbc:postgresql://localhost:5432/notification-dev"
-    username: "user"
-    password: "P@55w0rd"
-    schemas: "notification"
-  zipkin:
-    kafka:
-      topic: zipkin
-    sender:
-      type: KAFKA
-  kafka:
-    bootstrap-servers: http://localhost:9092, http://localhost:9093, http://localhost:9094
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: notification-events-listener-group
-      enable-auto-commit: false
-      auto-offset-reset: earliest
-      properties:
-        isolation.level: read_committed
-    template:
-      default-topic: notification-event
-    listener:
-      ack-mode: manual
+  config:
+    activate:
+      on-profile: default
+    import: configserver:http://localhost:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
 
 server:
   port: 8084
-  shutdown: graceful
-  servlet:
-    session:
-      timeout: 60m
-      cookie:
-        http-only: true
-    application-display-name: kafka-consumer
-  compression:
-    enabled: true
-    mime-types: "text/html, text/xml, text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, image/jpeg, image/png, application/octet-stream"
-  error:
-    whitelabel:
-      enabled: false
-
-logging:
-  level:
-    root: info
-    org:
-      springframework:
-        boot: info
-        kafka: info
----
-spring:
-  application:
-    name: consumer-service
-  main:
-    banner-mode: off
-  cloud:
-    config:
-      enabled: true
-  config:
-    activate:
-      on-profile: prod
-    import: configserver:http://config-server:8088?fail-fast=true&max-attempts=3&max-interval=1500&multiplier=1.2&initial-interval=1100
