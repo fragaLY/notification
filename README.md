@@ -15,19 +15,16 @@
 * Logback;
 * Github CI;
 * Grype;
-* [Kafka UI](https://github.com/obsidiandynamics/kafdrop)
+* [Kafka UI](https://github.com/obsidiandynamics/kafdrop);
+* Zipkin.
 
 ##### IN PROGRESS:
-* Zipkin;
 * Prometheus;
 * Grafana;
-* Ktlint;
 * Resilience4j;
 * Kibana;
-* Spring Admin Management Client;
 * Avro;
 * Spring Cache + Redis;
-* OPENAPI 3;
 * Debezium for Outbox + Delay Queue;
 * TSL support;
 * Vault;  
