@@ -17,7 +17,7 @@ class NotificationPreFilter : AbstractGatewayFilterFactory<NotificationPreFilter
     class Config
 
     override fun apply(config: Config?) =
-        GatewayFilter { exchange: ServerWebExchange?, chain: GatewayFilterChain ->
-            chain.filter(exchange).then(Mono.fromRunnable { logger.info("[GATEWAY] Pre filter") })
-        }
+            GatewayFilter { exchange: ServerWebExchange?, chain: GatewayFilterChain ->
+                chain.filter(exchange).then(Mono.fromRunnable { logger.info("[GATEWAY] Request with [ TraceId = ${exchange?.request?.headers?.get("X-Cloud-Trace-Context")}] and [CSRF token = ${exchange?.request?.headers?.get("X-CSRF-TOKEN")}] pre handling.") })
+            }
 }
