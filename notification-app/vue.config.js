@@ -4,7 +4,7 @@ module.exports = {
             "/api/*": {
                 warnings: true,
                 errors: true,
-                target: "http://gateway-prod:8083/",
+                target: "http://localhost:8083/",
                 secure: false
             }
         }
